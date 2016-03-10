@@ -29,7 +29,9 @@ public class MonkeyService extends AccessibilityService {
     private AccessibilityNodeInfo nodeInfo;
     private volatile String mCommandData;
     protected volatile List<EventCommand> commands=new ArrayList<>();
+    protected volatile Iterator<EventCommand> iterator;
     private EventCommand lastEventCommand;
+    private boolean isLastCommandFinished=true;
     //private String lastClassName;
     private Thread timeThread;
     private BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
@@ -43,8 +45,10 @@ public class MonkeyService extends AccessibilityService {
     };
 
     private void timeRun(){
+
          if(!(timeThread==null)&&!timeThread.isInterrupted())
             timeThread.interrupt();
+        iterator=commands.iterator();
         timeThread=new Thread(new Runnable() {
             @Override
             public void run() {
@@ -56,12 +60,15 @@ public class MonkeyService extends AccessibilityService {
                 }
                 Log.e("eee",lastClassName);
                 Log.e("eee",lastEventCommand.getmClassName());*/
-                synchronized (commands){
-                    while (true){
+                synchronized (iterator){
+                    while (isLastCommandFinished){
                         try {
                             commands.wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
+                        }
+                        if (iterator.hasNext()) {
+                            lastEventCommand=iterator.next();
                         }
                     }
 
