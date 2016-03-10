@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -26,21 +27,25 @@ import java.util.List;
 public class MonkeyService extends AccessibilityService {
 
     public static final String COMMAND_RESULT = "COMMAND_RESULT";
+    public static final String DEBUG="test";
     private AccessibilityNodeInfo nodeInfo;
     private volatile String mCommandData;
     protected volatile List<EventCommand> commands=new ArrayList<>();
+    protected  List<String> classNames=new ArrayList<>();
     protected volatile Iterator<EventCommand> iterator;
     private EventCommand lastEventCommand;
-    private boolean isLastCommandFinished=true;
-    //private String lastClassName;
+    private String lastClassName;
     private Thread timeThread;
+    private int nameNumber=0;
+    private long startTime;
+    private long endTime;
     private BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             setData(intent.getStringExtra("json"));
             parseJson();
             performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME);
-            timeRun();
+            //timeRun();
         }
     };
 
@@ -52,27 +57,13 @@ public class MonkeyService extends AccessibilityService {
         timeThread=new Thread(new Runnable() {
             @Override
             public void run() {
-                /*try {
+                try {
                     Thread.sleep(20000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     Log.e("eee", "interupt");
                 }
-                Log.e("eee",lastClassName);
-                Log.e("eee",lastEventCommand.getmClassName());*/
-                synchronized (iterator){
-                    while (isLastCommandFinished){
-                        try {
-                            commands.wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        if (iterator.hasNext()) {
-                            lastEventCommand=iterator.next();
-                        }
-                    }
 
-                }
             }
         });
         timeThread.start();
@@ -114,6 +105,7 @@ public class MonkeyService extends AccessibilityService {
                 JSONObject jsonObject=jsonArray.getJSONObject(i);
                 EventCommand eventCommand=new EventCommand(jsonObject.getString("mClassName"),jsonObject.getString("mEventType"),jsonObject.getString("mNodeType"),jsonObject.getString("mAction"),jsonObject.getString("mTextValue"));
                 commands.add(eventCommand);
+                classNames.add(eventCommand.getmClassName());
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -130,9 +122,19 @@ public class MonkeyService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
 
-/*        mHandler.removeMessages(EventCommand.COMMAND_STATE_FAIL);*/
         int eventType = event.getEventType();
         String className = event.getClassName().toString();
+        if(nameNumber<classNames.size()){
+            if(className.equals(classNames.get(nameNumber))){
+                endTime=SystemClock.currentThreadTimeMillis()-startTime;
+                startTime= SystemClock.currentThreadTimeMillis();
+                Log.d(DEBUG,"entime:"+endTime);
+                nameNumber++;
+            }
+        }else {
+            endTime=SystemClock.currentThreadTimeMillis()-startTime;
+            Log.d(DEBUG,"final:entime:"+endTime);
+        }
         //lastClassName=className;
         eventCommandIterator = commands.iterator();
         while (eventCommandIterator.hasNext()){
@@ -140,26 +142,7 @@ public class MonkeyService extends AccessibilityService {
             executeCommand(eventType, className, e);
         }
     }
-/*    private final Handler mHandler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-                case EventCommand.COMMAND_STATE_FAIL:
 
-                    break;
-                case EventCommand.COMMAND_STATE_ERRO:
-                    ArrayList<EventCommand> cs=(ArrayList<EventCommand>)msg.obj;
-                    String text=""+"Error";
-                    for(EventCommand c:cs){
-                        text=text+";"+c.getmTextValue();
-                    }
-                    break;
-                default:
-                    throw new IllegalStateException("未知的命令消息");
-            }
-        }
-    };*/
     private void executeCommand(int eventType, String className, EventCommand e) {
         if(eventType==e.getmEventType()&& className.equals(e.getmClassName())){
             nodeInfo = getRootInActiveWindow();
