@@ -37,8 +37,8 @@ public class MonkeyService extends AccessibilityService {
     private String lastClassName;
     private Thread timeThread;
     private int nameNumber=0;
-    private long startTime;
-    private long endTime;
+    private long startTime=0;
+    private long endTime=0;
     private BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -99,6 +99,8 @@ public class MonkeyService extends AccessibilityService {
     }
     private void parseJson(){
         commands.clear();
+        classNames.clear();
+        nameNumber=0;
         try {
             JSONArray jsonArray=new JSONArray(mCommandData);
             for (int i=0;i<jsonArray.length();i++){
@@ -125,14 +127,23 @@ public class MonkeyService extends AccessibilityService {
         int eventType = event.getEventType();
         String className = event.getClassName().toString();
         if(nameNumber<classNames.size()){
-            if(className.equals(classNames.get(nameNumber))){
-                endTime=SystemClock.currentThreadTimeMillis()-startTime;
-                startTime= SystemClock.currentThreadTimeMillis();
+            String str=classNames.get(nameNumber);
+            if(className.equals(str)){
+                long tmep=startTime;
+
+                startTime=SystemClock.currentThreadTimeMillis()*1000L;
+                if(startTime!=0){
+                    endTime=(SystemClock.currentThreadTimeMillis()-tmep)*1000L;
+                }
+
+                Log.d(DEBUG,"starttime"+startTime);
                 Log.d(DEBUG,"entime:"+endTime);
+                Log.d(DEBUG,"size"+nameNumber);
                 nameNumber++;
             }
-        }else {
-            endTime=SystemClock.currentThreadTimeMillis()-startTime;
+        }else if (nameNumber==classNames.size()){
+            endTime=SystemClock.currentThreadTimeMillis()*1000L-startTime;
+            Log.d(DEBUG,"starttime"+startTime);
             Log.d(DEBUG,"final:entime:"+endTime);
         }
         //lastClassName=className;
