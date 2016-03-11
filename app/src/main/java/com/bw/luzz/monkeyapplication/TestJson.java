@@ -73,4 +73,34 @@ public class TestJson {
             "      \"mTextValue\": \"确认支付\"" +
             "    }" +
             "  ]";
+        public static final String json4=" [" +
+                "    {" +
+                "      \"mClassName\": \"com.android.launcher.HomeActivity\"," +
+                "      \"mAction\": \"click\"," +
+                "      \"mEventType\": \"window\"," +
+                "      \"mNodeType\": \"text\"," +
+                "      \"mTextValue\": \"单机\"" +
+                "    }," +
+                "    {" +
+                "      \"mClassName\": \"cn.cmgame.billing.ui.c\"," +
+                "      \"mAction\": \"click\"," +
+                "      \"mEventType\": \"window\"," +
+                "      \"mNodeType\": \"text\"," +
+                "      \"mTextValue\": \"进入游戏\"" +
+                "    }," +
+                "    {" +
+                "      \"mClassName\": \"com.example.testgetimei.MainActivity\"," +
+                "      \"mAction\": \"click\"," +
+                "      \"mEventType\": \"window\"," +
+                "      \"mNodeType\": \"text\"," +
+                "      \"mTextValue\": \"测试使用1\"" +
+                "    }," +
+                "    {" +
+                "      \"mClassName\": \"cn.cmgame.billing.ui.c\"," +
+                "      \"mAction\": \"click\"," +
+                "      \"mEventType\": \"window\"," +
+                "      \"mNodeType\": \"text\"," +
+                "      \"mTextValue\": \"确认支付\"" +
+                "    }" +
+                "  ]";
 }

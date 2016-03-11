@@ -126,6 +126,7 @@ public class MonkeyService extends AccessibilityService {
 
         int eventType = event.getEventType();
         String className = event.getClassName().toString();
+        Log.d(DEBUG,"classname::"+className);
         if(nameNumber<classNames.size()){
             String str=classNames.get(nameNumber);
             if(className.equals(str)){
@@ -133,7 +134,7 @@ public class MonkeyService extends AccessibilityService {
 
                 startTime=SystemClock.currentThreadTimeMillis()*1000L;
                 if(startTime!=0){
-                    endTime=(SystemClock.currentThreadTimeMillis()-tmep)*1000L;
+                    endTime=SystemClock.currentThreadTimeMillis()*1000L-tmep;
                 }
 
                 Log.d(DEBUG,"starttime"+startTime);

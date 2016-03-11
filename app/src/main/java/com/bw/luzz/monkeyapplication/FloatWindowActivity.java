@@ -77,7 +77,7 @@ public class FloatWindowActivity extends AppCompatActivity {
             "      \"mTextValue\": \"确认支付\"" +
             "    }" +
             "  ]";*/
-    private String jsonData=" [" +
+    /*private String jsonData=" [" +
             "    {" +
             "      \"mClassName\": \"com.android.launcher3.Launcher\"," +
             "      \"mAction\": \"click\"," +
@@ -99,7 +99,8 @@ public class FloatWindowActivity extends AppCompatActivity {
             "      \"mNodeType\": \"text\"," +
             "      \"mTextValue\": \"确认支付\"" +
             "    }" +
-            "  ]";
+            "  ]";*/
+    private String jsonData=TestJson.json4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
