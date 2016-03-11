@@ -7,9 +7,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
+
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
+
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -27,7 +27,7 @@ import java.util.List;
 public class MonkeyService extends AccessibilityService {
 
     public static final String COMMAND_RESULT = "COMMAND_RESULT";
-    public static final String DEBUG="test";
+/*    public static final String DEBUG="test";*/
     private AccessibilityNodeInfo nodeInfo;
     private volatile String mCommandData;
     protected volatile List<EventCommand> commands=new ArrayList<>();
@@ -36,9 +36,9 @@ public class MonkeyService extends AccessibilityService {
     private EventCommand lastEventCommand;
     private String lastClassName;
     private Thread timeThread;*/
-    private int nameNumber=0;
+/*    private int nameNumber=0;
     private long startTime=0;
-    private volatile long endTime=0;
+    private volatile long endTime=0;*/
     private BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -99,7 +99,7 @@ public class MonkeyService extends AccessibilityService {
     private void parseJson(){
         commands.clear();
         classNames.clear();
-        nameNumber=0;
+        //nameNumber=0;
         try {
             JSONArray jsonArray=new JSONArray(mCommandData);
             for (int i=0;i<jsonArray.length();i++){
