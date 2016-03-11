@@ -32,10 +32,10 @@ public class MonkeyService extends AccessibilityService {
     private volatile String mCommandData;
     protected volatile List<EventCommand> commands=new ArrayList<>();
     protected  List<String> classNames=new ArrayList<>();
-    protected volatile Iterator<EventCommand> iterator;
+/*    protected volatile Iterator<EventCommand> iterator;
     private EventCommand lastEventCommand;
     private String lastClassName;
-    private Thread timeThread;
+    private Thread timeThread;*/
     private int nameNumber=0;
     private long startTime=0;
     private volatile long endTime=0;
@@ -111,7 +111,7 @@ public class MonkeyService extends AccessibilityService {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        lastEventCommand=commands.get(commands.size()-1);
+        //lastEventCommand=commands.get(commands.size()-1);
     }
 
     @Override
@@ -136,14 +136,14 @@ public class MonkeyService extends AccessibilityService {
 
         int eventType = event.getEventType();
         String className = event.getClassName().toString();
-        Log.d(DEBUG,"classname::"+className);
+        //Log.d(DEBUG,"classname::"+className);
         mhandler.removeMessages(1);
         if(className.equals("android.app.Dialog")){
             Message msg=Message.obtain();
             msg.what=1;
             mhandler.sendMessageDelayed(msg, 5000);
         }
-        if(nameNumber<classNames.size()){
+        /*if(nameNumber<classNames.size()){
             String str=classNames.get(nameNumber);
             if(className.equals(str)){
                 long tmep=startTime;
@@ -168,7 +168,7 @@ public class MonkeyService extends AccessibilityService {
             }else {
                // Log.d(DEBUG,"脚本即将结束");
             }
-        }
+        }*/
         //lastClassName=className;
         eventCommandIterator = commands.iterator();
         while (eventCommandIterator.hasNext()){
