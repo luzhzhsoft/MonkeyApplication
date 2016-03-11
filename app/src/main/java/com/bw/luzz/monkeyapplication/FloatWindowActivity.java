@@ -42,9 +42,7 @@ public class FloatWindowActivity extends AppCompatActivity {
     private BroadcastReceiver mBroadcastReceiver=new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String result=intent.getStringExtra(MonkeyService.COMMAND_RESULT);
-            Toast.makeText(context,result,Toast.LENGTH_SHORT).show();
-            Log.e("aaa","result:"+result);
+            Toast.makeText(context,"超时结束",Toast.LENGTH_SHORT).show();
         }
     };
     /*private String jsonData=" [" +
@@ -77,7 +75,7 @@ public class FloatWindowActivity extends AppCompatActivity {
             "      \"mTextValue\": \"确认支付\"" +
             "    }" +
             "  ]";*/
-    /*private String jsonData=" [" +
+    private String jsonData=" [" +
             "    {" +
             "      \"mClassName\": \"com.android.launcher3.Launcher\"," +
             "      \"mAction\": \"click\"," +
@@ -99,8 +97,8 @@ public class FloatWindowActivity extends AppCompatActivity {
             "      \"mNodeType\": \"text\"," +
             "      \"mTextValue\": \"确认支付\"" +
             "    }" +
-            "  ]";*/
-    private String jsonData=TestJson.json4;
+            "  ]";
+   // private String jsonData=TestJson.json4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

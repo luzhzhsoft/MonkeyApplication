@@ -38,7 +38,7 @@ public class MonkeyService extends AccessibilityService {
     private Thread timeThread;
     private int nameNumber=0;
     private long startTime=0;
-    private long endTime=0;
+    private volatile long endTime=0;
     private BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -49,11 +49,10 @@ public class MonkeyService extends AccessibilityService {
         }
     };
 
-    private void timeRun(){
+    /*private void timeRun(){
 
          if(!(timeThread==null)&&!timeThread.isInterrupted())
             timeThread.interrupt();
-        iterator=commands.iterator();
         timeThread=new Thread(new Runnable() {
             @Override
             public void run() {
@@ -67,7 +66,7 @@ public class MonkeyService extends AccessibilityService {
             }
         });
         timeThread.start();
-    }
+    }*/
 
     private Iterator<EventCommand> eventCommandIterator;
 
@@ -121,31 +120,54 @@ public class MonkeyService extends AccessibilityService {
         IntentFilter intentFilter=new IntentFilter(MonkeyService.class.getName());
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
     }
+    Handler mhandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(msg.what==1){
+                Intent ib=new Intent(COMMAND_RESULT);
+                LocalBroadcastManager.getInstance(MonkeyService.this).sendBroadcast(ib);
+                Toast.makeText(getApplicationContext(),"执行超时",Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
 
         int eventType = event.getEventType();
         String className = event.getClassName().toString();
         Log.d(DEBUG,"classname::"+className);
+        mhandler.removeMessages(1);
+        if(className.equals("android.app.Dialog")){
+            Message msg=Message.obtain();
+            msg.what=1;
+            mhandler.sendMessageDelayed(msg, 5000);
+        }
         if(nameNumber<classNames.size()){
             String str=classNames.get(nameNumber);
             if(className.equals(str)){
                 long tmep=startTime;
 
-                startTime=SystemClock.currentThreadTimeMillis()*1000L;
-                if(startTime!=0){
-                    endTime=SystemClock.currentThreadTimeMillis()*1000L-tmep;
+                startTime=System.currentTimeMillis();
+                if(tmep!=0){
+                    endTime=System.currentTimeMillis()-tmep;
+                    if(endTime>3000){
+                        //Log.d(DEBUG,"超时"+endTime);
+                    }
+                }else {
+                    endTime=0;
                 }
 
-                Log.d(DEBUG,"starttime"+startTime);
-                Log.d(DEBUG,"entime:"+endTime);
-                Log.d(DEBUG,"size"+nameNumber);
                 nameNumber++;
             }
         }else if (nameNumber==classNames.size()){
-            endTime=SystemClock.currentThreadTimeMillis()*1000L-startTime;
-            Log.d(DEBUG,"starttime"+startTime);
-            Log.d(DEBUG,"final:entime:"+endTime);
+            endTime=System.currentTimeMillis()-startTime;
+            startTime=System.currentTimeMillis();
+            if(endTime>3000){
+                //Log.d(DEBUG,"超时"+endTime);
+            }else {
+               // Log.d(DEBUG,"脚本即将结束");
+            }
         }
         //lastClassName=className;
         eventCommandIterator = commands.iterator();
