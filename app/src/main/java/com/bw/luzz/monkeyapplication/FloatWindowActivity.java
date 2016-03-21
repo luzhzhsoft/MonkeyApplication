@@ -77,7 +77,7 @@ public class FloatWindowActivity extends AppCompatActivity {
             "  ]";*/
     private String jsonData=" [" +
             "    {" +
-            "      \"mClassName\": \"com.android.launcher3.Launcher\"," +
+            "      \"mClassName\": \"com.android.launcher2.Launcher\"," +
             "      \"mAction\": \"click\"," +
             "      \"mEventType\": \"window\"," +
             "      \"mNodeType\": \"text\"," +
