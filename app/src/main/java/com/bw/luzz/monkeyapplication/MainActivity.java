@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -22,33 +23,17 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActionMode mmode=startActionMode(new android.view.ActionMode.Callback() {
+                new Thread(){
                     @Override
-                    public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
-                        MenuInflater inflater=mode.getMenuInflater();
-
-                        inflater.inflate(R.menu.menu_action_mode,menu);
-                        return true;
+                    public void run() {
+                        super.run();
+                        MonkeyInput.sendCommands("tap 928 675".split(" "));
                     }
+                }.start();
 
-                    @Override
-                    public boolean onPrepareActionMode(android.view.ActionMode mode, Menu menu) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onActionItemClicked(android.view.ActionMode mode, MenuItem item) {
-                        return false;
-                    }
-
-                    @Override
-                    public void onDestroyActionMode(android.view.ActionMode mode) {
-
-                    }
-                });
             }
         });
-
+        getBaseContext();
     }
 
     @Override

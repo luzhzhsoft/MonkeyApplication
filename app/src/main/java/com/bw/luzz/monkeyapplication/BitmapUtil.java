@@ -1,12 +1,16 @@
 package com.bw.luzz.monkeyapplication;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import android.os.Environment;
+import android.os.IInterface;
+import android.os.RemoteCallbackList;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Surface;
@@ -106,6 +110,9 @@ public class BitmapUtil {
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
+            if(bitmap==null){
+                throw new RuntimeException("需要系统签名才能调用此方法");
+            }
             return bitmap;
         }
         try {
@@ -120,6 +127,9 @@ public class BitmapUtil {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+        }
+        if(bitmap==null){
+            throw new RuntimeException("需要系统签名才能调用此方法");
         }
         return bitmap;
     }
@@ -174,12 +184,12 @@ public class BitmapUtil {
      * @param otherPixels 比对的像素点数组
      * @return true 相同。false 不同；
      */
-    public boolean isSameByPixel(int[] pixels,int[] otherPixels){
+    public static boolean isSameByPixel(int[] pixels,int[] otherPixels){
         if(pixels.length!=otherPixels.length){
             throw new IllegalArgumentException("错误的参数。像素点的个数不同");
         }
         for(int i=0;i<pixels.length;i++){
-            if(pixels[i]==otherPixels[i]){
+            if(pixels[i]!=otherPixels[i]){
                 return false;
             }
 
@@ -194,12 +204,21 @@ public class BitmapUtil {
      * @param points 像素点的位置
      * @return 是否相同
      */
-    public boolean isSameByPosition(Bitmap bitmap,Bitmap other,Point[] points){
+    public static boolean isSameByPosition(Bitmap bitmap,Bitmap other,Point[] points){
         for(Point p:points){
             if(bitmap.getPixel(p.x,p.y)!=bitmap.getPixel(p.x,p.y))
                 return false;
         }
         return true;
+    }
+
+    /*public boolean isSameFormPosition(Point[] point,int[] others){
+        for (int i=0;i<point.length;i++){
+            int pixel=get
+        }
+    }*/
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void getScreenBitma(){
     }
 
 

@@ -1,11 +1,5 @@
 package com.bw.luzz.monkeyapplication;
 
-import android.accessibilityservice.AccessibilityService;
-import android.accessibilityservice.AccessibilityServiceInfo;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ArgbEvaluator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,20 +10,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.accessibility.AccessibilityManager;
-import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
-import java.util.List;
 
 public class FloatWindowActivity extends AppCompatActivity {
     Button mStartButton;
@@ -242,7 +231,6 @@ public class FloatWindowActivity extends AppCompatActivity {
             mB.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                 }
             });
             this.addView(v);
