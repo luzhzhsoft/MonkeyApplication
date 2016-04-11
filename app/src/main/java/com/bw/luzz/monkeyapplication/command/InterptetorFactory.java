@@ -3,8 +3,6 @@ package com.bw.luzz.monkeyapplication.command;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.naming.TimeLimitExceededException;
-
 /**
  * Created by Luzz on 2016/4/6.
  */
@@ -48,7 +46,7 @@ public class InterptetorFactory {
         	}else if(mach2.matches()||mach3.matches()){
         		return BaseValueInterpretor.getInstance();
         	}else{
-        		throw new RuntimeException("��֧�ֵ��﷨"+cmd);
+        		throw new RuntimeException("不支持的语法"+cmd);
         	}        	
         }
     }   

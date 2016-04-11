@@ -42,7 +42,7 @@ public class BananaRunner {
     }
     public static void main(String[] args){
     	BananaRunner bn=BananaRunner.getInstance();
-    	String script="TracePrint:��Ϸkais \n"+ 
+    	String script="TracePrint:游戏kais \n"+
     			"If  \"a\" = \"a\" \n" +
                 "Then TracePrint: helloee \n" +
     			"Delay 6000 \n"+
@@ -53,7 +53,7 @@ public class BananaRunner {
                 "If dfs\n"+
                 "End \n"+
                 "End \n"+
-                "TracePrint:��Ϸ����";
+                "TracePrint:游戏结束";
     	bn.setScript(script);
     	bn.run();
     	

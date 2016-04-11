@@ -11,7 +11,7 @@ public class EndIfInterpretor extends CommandInterpretor{
     }
     private static EndIfInterpretor mEndIfInterpretor;
     private EndIfInterpretor(){
-    	RunResult.throwErro("ִ���� EndIf��ifѭ��д����");
+    	RunResult.throwErro("执行了 EndIf。if循环写错了");
     }
     public static EndIfInterpretor getInstance(){
         if(mEndIfInterpretor==null){

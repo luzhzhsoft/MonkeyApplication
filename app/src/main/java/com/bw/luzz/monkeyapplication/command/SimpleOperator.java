@@ -5,7 +5,7 @@ public class SimpleOperator extends OperatorInterpretor{
 	@Override
 	protected String interprete(String leftResult, String rightResult) {
 		// TODO Auto-generated method stub
-		RunResult.throwErro("ʹ�����������û���κ�����r(�s���t)�q");
+		RunResult.throwErro("使用这个方法，没有任何意义╮(╯▽╰)╭");
 		return null;
 	}
 	  private static SimpleOperator mIfInterpretor;

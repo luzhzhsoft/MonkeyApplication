@@ -8,11 +8,11 @@ public class DelayInterpretor extends CommandInterpretor{
 		command.trim();
 		String[] coms=command.split(" ");
 		if(!coms[0].trim().equals(KeyWorld.Delay)){
-			RunResult.throwErro("�ڲ�����"+command);
+			RunResult.throwErro("内部错误："+command);
 			
 		}
 		if(coms.length>2){
-			RunResult.throwErro("�﷨����Ӧ��ΪDelay time:"+command);
+			RunResult.throwErro("语法错误。应该为Delay time:"+command);
 		}
 		long timeDealy= Long.valueOf(coms[1].trim());
 		

@@ -5,7 +5,7 @@ public class CellInterpretor extends CommandInterpretor{
 	public String interprete(String command) {
 		// TODO Auto-generated method stub
 		String[] coms=command.split("\n");
-		//ѭ��Ƕ�ױ�־λ
+		//循环嵌套标志位
 		int nestFlag=0;
 		String commandUnity="";
 		for(int i=0;i<coms.length;i++){
@@ -14,7 +14,7 @@ public class CellInterpretor extends CommandInterpretor{
         	boolean isLackInfo=temp.endsWith(KeyWorld.IF)||temp.equals(KeyWorld.While)||temp.equals(KeyWorld.Switch)||temp.equals(KeyWorld.For);
         	
         	if(isLackInfo){
-        		throw new RuntimeException("ȱ������");
+        		throw new RuntimeException("缺少条件");
         	}
         	if(temp.startsWith(KeyWorld.IF+KeyWorld.Blank)){
         		nestFlag++;
@@ -32,12 +32,12 @@ public class CellInterpretor extends CommandInterpretor{
         	}
         	commandUnity=commandUnity+temp; 
         	if(nestFlag<0) 
-    			throw new RuntimeException("ѭ��Ƕ�׳��?�Ƿ��д��End������Ƕ�׳���");
+    			throw new RuntimeException("循环嵌套出错，是否多写了End，或者嵌套出错");
         	if(nestFlag==0){
         		
         	}else{
         		if(i==coms.length-1&&nestFlag>0){
-        			throw new RuntimeException("ѭ���޷������Ƿ�ȱ��End�ؼ��֣�");
+        			throw new RuntimeException("循环无法结束，是否缺少End关键字？");
         		}
         		continue;
         	}
@@ -45,8 +45,9 @@ public class CellInterpretor extends CommandInterpretor{
             
             commandUnity="";
         }
-		
-		//�Ȳ�֧�ַ���
+
+
+		//先不支持返回
 		return null;
 	}
 	  private static CellInterpretor mIfInterpretor;

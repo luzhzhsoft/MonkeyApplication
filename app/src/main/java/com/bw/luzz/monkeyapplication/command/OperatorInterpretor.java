@@ -56,7 +56,7 @@ public abstract class OperatorInterpretor extends CommandInterpretor{
 				childs.push(OperatorAddInterpretor.getInstance());
 			}
 		}else{
-			RunResult.throwErro("δ֪�����ڽ������ʽʱ����"+command);
+			RunResult.throwErro("未知错误在解析表达式时发生："+command);
 		}
 		String[] coms=command.split(priority);
 		String right=coms[coms.length-1];

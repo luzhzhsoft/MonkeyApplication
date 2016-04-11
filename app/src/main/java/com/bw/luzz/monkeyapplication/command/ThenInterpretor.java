@@ -20,7 +20,7 @@ public class ThenInterpretor extends CommandInterpretor{
     }
     private static ThenInterpretor mThenInterpretor;
     private ThenInterpretor(){
-    	RunResult.throwErro("ִ����Then��Ӧ����if��ʼ");
+    	RunResult.throwErro("执行了Then，应该以if开始");
     }
     public static ThenInterpretor getInstance(){
         if(mThenInterpretor==null){

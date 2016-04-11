@@ -41,7 +41,7 @@ public class IfInterpretor extends CommandInterpretor{
     				cmIf=endMatcher.group(1).replace(KeyWorld.IF,"");
     	    		 cmThen=endMatcher.group(2).replace(KeyWorld.Then, "");
     			}else{
-    				RunResult.throwErro("ִ�� if ѭ������,ȱ��end����"+command);
+    				RunResult.throwErro("执行 if 循环错误,缺少end？："+command);
     			}
     		}else{
     			cmIf=matcher2.group(1).replace(KeyWorld.IF,"");
