@@ -21,8 +21,8 @@ public class WhileInterpretor extends CommandInterpretor{
 		String condition=matcher.group(1).replaceFirst("\\b"+KeyWorld.While+"\\b", "").trim();
 		String body=matcher.group(2).replaceFirst("\\s*End$","");
 		
-		while(InterptetorFactory.judge(condition)){
-			InterptetorFactory.execute(body);
+		while(BananaRunner.judge(condition)){
+			BananaRunner.execute(body);
 		}				
 		return null;
 	}

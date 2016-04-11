@@ -1,6 +1,10 @@
 package com.bw.luzz.monkeyapplication.command;
 
 
+import android.util.Log;
+
+import com.bw.luzz.monkeyapplication.BananaService;
+import com.bw.luzz.monkeyapplication.MonkeyInput;
 
 /**
  * Created by Luzz on 2016/4/6.
@@ -8,7 +12,10 @@ package com.bw.luzz.monkeyapplication.command;
 public class InputInterpretor extends  CommandInterpretor{
     @Override
     public String interprete(String command) {
-    	System.out.println("input::"+command);
+    	//System.out.println("input::"+command);
+        command=command.trim();
+        Log.d(BananaService.BANANA_SERVICE,command);
+        MonkeyInput.sendCommands(command.split(" "));
         return null;
     }
 

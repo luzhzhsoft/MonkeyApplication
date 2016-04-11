@@ -1,64 +1,77 @@
 package com.bw.luzz.monkeyapplication.command;
 
-
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Queue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Luzz on 2016/4/6.
  */
 public class BananaRunner {
-    private String coms;
-    public void setScript(String script){
-        coms = script;
-    }
-    public void run(){
-        Thread thread=new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				InterptetorFactory.execute(coms);
-			}
-		});
-        thread.setName("bananarunner thread");
-        thread.start();
-    }
-
-    private static BananaRunner mBananaRunner;
-    private BananaRunner(){}
-    public static BananaRunner getInstance(){
-        if(mBananaRunner==null){
-            synchronized (BananaRunner.class){
-                if(mBananaRunner==null){
-                    mBananaRunner=new BananaRunner();
-                }
-            }
+    public static CommandInterpretor getInterpretor(String command){
+        String cmd=command.trim();
+        
+        String circul="((If)|(While)|(For)|(Switch))[\\w\\W]*End$";
+        Matcher prm=Pattern.compile(circul).matcher(command);
+        if((!prm.matches())&&cmd.contains("\n")){     	
+        	return CellInterpretor.getInstance();    	
         }
-        return mBananaRunner;
-    }
+        String[] commandKey=cmd.split(" ");
+        if(commandKey[0].equals("tap")){
+            return InputInterpretor.getInstance();
+        } else if(commandKey[0].equals("If")){
+            return IfInterpretor.getInstance();
+        }else if(commandKey[0].equals("EndIf")){
+            return EndIfInterpretor.getInstance();
+        }else if(commandKey[0].equals("Then")){
+            return ThenInterpretor.getInstance();
+        }else if(commandKey[0].startsWith("TracePrint")){
+            return TracePrintInterpreor.getInstance();
+        }else if(commandKey[0].startsWith(KeyWorld.Delay)){
+            return DelayInterpretor.getInstance();
+        }else if(commandKey[0].startsWith(KeyWorld.While)){
+            return WhileInterpretor.getInstance();
+        }else if(commandKey[0].equals("true")||commandKey[0].equals("false")){
+            return BaseValueInterpretor.getInstance();
+        }else {
+        	Pattern pequail=Pattern.compile("[=+*/%]|(\\bmod\\b)");
+        	Pattern pmaohao=Pattern.compile("\"[\\w\\W]*?\"");
+        	//ƥ������
+        	Pattern digtal=Pattern.compile("^[-+]?(([0-9]+)([.]([0-9]+))?|([.]([0-9]+))?)$");
+        	Matcher matcher=pequail.matcher(cmd);
+        	Matcher mach2=pmaohao.matcher(cmd);
+        	Matcher mach3=digtal.matcher(cmd);
+        	if(matcher.find()){
+        		return SimpleOperator.getInstance();
+        	}else if(mach2.matches()||mach3.matches()){
+        		return BaseValueInterpretor.getInstance();
+        	}else{
+        		throw new RuntimeException("不支持的语法"+cmd);
+        	}        	
+        }
+    }   
+    public static boolean judge(String condition){
+		String re=execute(condition);
+		Boolean is=Boolean.valueOf(re);
+		if(is.booleanValue()){
+			return true;
+		}else{
+			return false;
+		}
+		
+	}	
+	public static String execute(String command){
+		return BananaRunner.getInterpretor(command).interprete(command);
+	}
     public static void main(String[] args){
-    	BananaRunner bn=BananaRunner.getInstance();
-    	String script="TracePrint:游戏kais \n"+
-    			"If  \"a\" = \"a\" \n" +
-                "Then TracePrint: helloee \n" +
-    			"Delay 6000 \n"+
-    			"TracePrint:what \n"+
-    			"End \n"+
-                "If  \"a\" = \"b\" \n" +
-                "Then TracePrint: secod \n"+
-                "If dfs\n"+
-                "End \n"+
-                "End \n"+
-                "TracePrint:游戏结束";
-    	bn.setScript(script);
-    	bn.run();
-    	
+    	/*Pattern digtal=Pattern.compile("^[-+]?(([0-9]+)([.]([0-9]+))?|([.]([0-9]+))?)$");
+    	Matcher mach3=digtal.matcher("10");
+    	System.out.println(""+mach3.matches());*/
+	    	String str="If 14 = 10 + 4 \n"+
+	    				"Then TracePrint:Hello \n"+
+	    				"TracePrint:Hello \n"+
+	    				"End";
+	    	BananaRunner.execute(str);
+	    
     }
-
-
 
 }

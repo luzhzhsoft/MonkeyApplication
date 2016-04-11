@@ -1,6 +1,5 @@
 package com.bw.luzz.monkeyapplication.command;
 
-import java.math.MathContext;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,8 +19,8 @@ public class IfInterpretor extends CommandInterpretor{
     	if(matcher.find()){   		
     		String cmIf=matcher.group(1).replace(KeyWorld.IF,"");    		
     		String cmThen=matcher.group(2).replace(KeyWorld.Then, "").replaceFirst("\\b"+KeyWorld.ElseIf+"\\b", "");
-    		if (InterptetorFactory.getInterpretor(cmIf).interprete(cmIf).equals(KeyWorld.True)){
-    			InterptetorFactory.getInterpretor(cmThen).interprete(cmThen);
+    		if (BananaRunner.getInterpretor(cmIf).interprete(cmIf).equals(KeyWorld.True)){
+    			BananaRunner.getInterpretor(cmThen).interprete(cmThen);
         		return null;
             }else {
             	String cm=matcher.group();
@@ -50,11 +49,11 @@ public class IfInterpretor extends CommandInterpretor{
     		}
     		 
     		 
-    		if (InterptetorFactory.getInterpretor(cmIf).interprete(cmIf).equals(KeyWorld.True)){
-    			InterptetorFactory.getInterpretor(cmThen).interprete(cmThen);
+    		if (BananaRunner.getInterpretor(cmIf).interprete(cmIf).equals(KeyWorld.True)){
+    			BananaRunner.getInterpretor(cmThen).interprete(cmThen);
         		return null;
             }else {
-            	InterptetorFactory.getInterpretor(cmElse).interprete(cmElse);
+            	BananaRunner.getInterpretor(cmElse).interprete(cmElse);
             }   		
     	}   	
         return null;

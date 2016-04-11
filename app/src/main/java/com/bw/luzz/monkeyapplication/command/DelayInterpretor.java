@@ -36,5 +36,5 @@ public class DelayInterpretor extends CommandInterpretor{
         }
         return mDelayInterpretor;
     }
-	
+
 }

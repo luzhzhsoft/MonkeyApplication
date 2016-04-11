@@ -9,7 +9,7 @@ public class ThenInterpretor extends CommandInterpretor{
     @Override
     public String interprete(String command) {
         if(IsExecute){
-            CommandInterpretor CI=InterptetorFactory.getInterpretor(command);
+            CommandInterpretor CI= BananaRunner.getInterpretor(command);
             return CI.interprete(command.replace("Then",""));
         }else {
             return "gone";

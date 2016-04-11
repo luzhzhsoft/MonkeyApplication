@@ -41,7 +41,7 @@ public class CellInterpretor extends CommandInterpretor{
         		}
         		continue;
         	}
-        	InterptetorFactory.execute(commandUnity);
+        	BananaRunner.execute(commandUnity);
             
             commandUnity="";
         }

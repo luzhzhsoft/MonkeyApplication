@@ -2,13 +2,16 @@ package com.bw.luzz.monkeyapplication.command;
 
 
 
+import android.util.Log;
+
 /**
  * Created by Luzz on 2016/4/6.
  */
 public class TracePrintInterpreor  extends CommandInterpretor{
     @Override
     public String interprete(String command) {
-    	System.out.println("print:"+command.replace("TracePrint:",""));
+        //Log.d("BananaService",""+command);
+        System.out.print(""+command);
         return null;
     }
     private static TracePrintInterpreor mTracePrintInterpreor;

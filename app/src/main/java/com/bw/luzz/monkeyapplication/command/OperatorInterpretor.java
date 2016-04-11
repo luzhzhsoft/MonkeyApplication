@@ -61,8 +61,8 @@ public abstract class OperatorInterpretor extends CommandInterpretor{
 		String[] coms=command.split(priority);
 		String right=coms[coms.length-1];
 		String left=command.substring(0, command.length()-right.length()-offset);
-		String leftResult=InterptetorFactory.execute(left);
-		String rightResult=InterptetorFactory.execute(right);
+		String leftResult= BananaRunner.execute(left);
+		String rightResult= BananaRunner.execute(right);
 		return childs.pop().interprete(leftResult,rightResult);
 	}
 	
