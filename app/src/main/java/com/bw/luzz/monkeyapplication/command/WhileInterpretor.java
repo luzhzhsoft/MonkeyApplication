@@ -13,7 +13,7 @@ public class WhileInterpretor extends CommandInterpretor{
 		Pattern p=Pattern.compile(regex);
 		Matcher matcher=p.matcher(command);
 		if(!matcher.matches()){
-			RunResult.throwErro("factory�ڲ�����"+command);
+			RunResult.throwErro("factory内部错误："+command);
 			
 		}
 		
