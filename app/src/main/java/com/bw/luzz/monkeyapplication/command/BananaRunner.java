@@ -1,5 +1,7 @@
 package com.bw.luzz.monkeyapplication.command;
 
+import android.content.Context;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,12 +32,16 @@ public class BananaRunner {
             return DelayInterpretor.getInstance();
         }else if(commandKey[0].startsWith(KeyWorld.While)){
             return WhileInterpretor.getInstance();
-        }else if(commandKey[0].equals("true")||commandKey[0].equals("false")){
+        }else if(commandKey[0].startsWith(KeyWorld.CmpColor)){
+			return CmpColorInterpretor.getInstance(BananaThread.getInstance().getContext());
+		}else if(commandKey[0].startsWith(KeyWorld.GetPixelColor)){
+			return GetPixelColorInterpretor.getInstance(BananaThread.getInstance().getContext());
+		}else if(commandKey[0].equals("true")||commandKey[0].equals("false")){
             return BaseValueInterpretor.getInstance();
         }else {
         	Pattern pequail=Pattern.compile("[=+*/%]|(\\bmod\\b)");
         	Pattern pmaohao=Pattern.compile("\"[\\w\\W]*?\"");
-        	//ƥ������
+        	//数字的正则
         	Pattern digtal=Pattern.compile("^[-+]?(([0-9]+)([.]([0-9]+))?|([.]([0-9]+))?)$");
         	Matcher matcher=pequail.matcher(cmd);
         	Matcher mach2=pmaohao.matcher(cmd);

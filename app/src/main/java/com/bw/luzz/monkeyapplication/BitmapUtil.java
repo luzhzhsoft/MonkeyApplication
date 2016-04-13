@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.YuvImage;
 import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import android.os.Environment;
@@ -90,6 +91,12 @@ public class BitmapUtil {
         }
 
     }
+
+    /**
+     * 需要施放bitmap 的内存。否则会内存泄漏
+     * @param context
+     * @return
+     */
     public static Bitmap getSystemScreen(Context context){
         WindowManager windowManager=(WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
 
@@ -212,13 +219,34 @@ public class BitmapUtil {
         return true;
     }
 
-    /*public boolean isSameFormPosition(Point[] point,int[] others){
-        for (int i=0;i<point.length;i++){
-            int pixel=get
-        }
-    }*/
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void getScreenBitma(){
+    }
+
+    /**
+     * 对比指点点的颜色
+     * @param x
+     * @param y
+     * @param color int类型 10 进制
+     * @param context
+     * @return
+     */
+    public static boolean cmpColor(int x, int y, int color, Context context){
+        int screenColor = getPixelColor(x, y, context);
+        if(screenColor==color){
+            return true;
+        }
+        return false;
+
+    }
+
+    public static int getPixelColor(int x, int y, Context context) {
+        Bitmap bitmap=getSystemScreen(context);
+        int screenColor=bitmap.getPixel(x,y);
+        bitmap.recycle();
+        return screenColor;
+        //return x*1000+y;
     }
 
 

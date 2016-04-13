@@ -1,15 +1,35 @@
 package com.bw.luzz.monkeyapplication.command;
 
 
+import android.content.Context;
+
+import java.lang.ref.WeakReference;
+
 /**
  * Created by Luzz on 2016/4/6.
  */
 public class BananaThread {
     private String coms;
+    private WeakReference<Context> sContext;
     public BananaThread setScript(String script){
         this.coms = script;
         return this;
     }
+    public BananaThread setContext(Context context){
+         sContext=new WeakReference<Context>(context);
+
+        return this;
+    }
+    public Context getContext(){
+
+        Context context=sContext.get();
+        if(context!=null){
+            return context;
+        }else {
+            throw new RuntimeException("未设置context。或者已经被系统回收");
+        }
+    }
+
     public void run(){
         Thread thread=new Thread(new Runnable() {
 			

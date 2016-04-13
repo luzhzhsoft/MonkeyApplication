@@ -1,5 +1,8 @@
 package com.bw.luzz.monkeyapplication.command;
 
+/**
+ *
+ */
 public class KeyWorld {
 	public final static String IF="If";
 	public final static String While="While";
@@ -17,4 +20,6 @@ public class KeyWorld {
 	public final static String NewLine="\n";
 	public final static String Seprete="\n";		
 	public final static String Delay="Delay";
+	public final static String CmpColor="CmpColor";
+    public final static String GetPixelColor="GetPixelColor";
 }

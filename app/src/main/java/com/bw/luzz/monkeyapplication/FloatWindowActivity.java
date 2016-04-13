@@ -1,12 +1,18 @@
 package com.bw.luzz.monkeyapplication;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -64,16 +70,18 @@ public class FloatWindowActivity extends AppCompatActivity {
             "      \"mTextValue\": \"确认支付\"" +
             "    }" +
             "  ]";*/
-    private String jsonData=" [" +
+    /*private String jsonData=" [" +
             "    {" +
-            "      \"mClassName\": \"com.android.launcher2.Launcher\"," +
+            "      \"mClassName\": \"com.android.launch\r\ner2.Launcher\"," +
             "      \"mAction\": \"click\"," +
             "      \"mEventType\": \"window\"," +
             "      \"mNodeType\": \"text\"," +
             "      \"mTextValue\": \"单机\"" +
             "    }," +
             "    {" +
-            "      \"mClassName\": \"com.example.testgetimei.MainActivity\"," +
+            "      \"mClassName\": \"com.ex" +
+            "a" +
+            "mple.testge\r\ntimei.MainActivity\"," +
             "      \"mAction\": \"click\"," +
             "      \"mEventType\": \"window\"," +
             "      \"mNodeType\": \"text\"," +
@@ -86,7 +94,11 @@ public class FloatWindowActivity extends AppCompatActivity {
             "      \"mNodeType\": \"text\"," +
             "      \"mTextValue\": \"确认支付\"" +
             "    }" +
-            "  ]";
+            "  ]";*/
+    private String jsonData="While true \n" +
+            "Delay 1000 \n"+
+            "TracePrint:GetPixelColor(200,200)  \n" +
+            "End \n";
    // private String jsonData=TestJson.json4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +111,7 @@ public class FloatWindowActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showWindow(deskLayout);
+
             }
         });
         mLocalBroadcaseManager = LocalBroadcastManager.getInstance(this);
@@ -202,6 +215,8 @@ public class FloatWindowActivity extends AppCompatActivity {
 
     public class DeskLayout extends LinearLayout{
 
+        private Messenger bananaService;
+
         public DeskLayout(Context context) {
             super(context);
             setOrientation(LinearLayout.VERTICAL);
@@ -214,18 +229,26 @@ public class FloatWindowActivity extends AppCompatActivity {
             mStartButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(
-                            android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                    startActivity(intent);
 
+                    Intent i=new Intent(getApplicationContext(),BananaService.class);
+                    getApplicationContext().bindService(i, mServiceConnection, Context.BIND_AUTO_CREATE);
                 }
             });
             mA.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i=new Intent(MonkeyService.class.getName());
+                    /*Intent i=new Intent(MonkeyService.class.getName());
                     i.putExtra("json",jsonData);
-                    mLocalBroadcaseManager.sendBroadcast(i);
+                    mLocalBroadcaseManager.sendBroadcast(i);*/
+                    Message message=Message.obtain(null,BananaService.RUN_SCRIPT);
+                    Bundle data=new Bundle();
+                    data.putString(BananaService.SCRIPT,jsonData);
+                    message.setData(data);
+                    try {
+                        bananaService.send(message);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
             mB.setOnClickListener(new OnClickListener() {
@@ -241,6 +264,35 @@ public class FloatWindowActivity extends AppCompatActivity {
 
             return super.onTouchEvent(event);
         }
+         ServiceConnection mServiceConnection=new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name,final IBinder service) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        bananaService = new Messenger(service);
+                        Message message=Message.obtain(null,BananaService.RUN_SCRIPT);
+                        Bundle data=new Bundle();
+                        data.putString(BananaService.SCRIPT,jsonData);
+                        message.setData(data);
+                        try {
+                            bananaService.send(message);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
+                //Message message=new Message()
+
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                Intent i=new Intent(getContext(),BananaService.class);
+                bindService(i,mServiceConnection,Context.BIND_AUTO_CREATE);
+            }
+        };
     }
 
 }

@@ -23,8 +23,8 @@ public class IfInterpretor extends CommandInterpretor{
     			BananaRunner.getInterpretor(cmThen).interprete(cmThen);
         		return null;
             }else {
-            	String cm=matcher.group();
-            	String next=command.replaceFirst(cm,"");
+            	//String cm=matcher.group();
+            	String next=command.replaceFirst("(\\bIf\\b[\\w\\W]*?)(\\bThen\\b[\\w\\W]*?\\bElseIf\\b)","");
             	next=KeyWorld.IF+" "+next;
             	this.interprete(next);
             }
@@ -44,7 +44,7 @@ public class IfInterpretor extends CommandInterpretor{
     			}
     		}else{
     			cmIf=matcher2.group(1).replace(KeyWorld.IF,"");
-       		 cmThen=matcher2.group(2).replace(KeyWorld.Then, "");
+       		 	cmThen=matcher2.group(2).replace(KeyWorld.Then, "");
     			cmElse=matcher2.group(3).replaceFirst(KeyWorld.Else, "").replaceFirst("\\b"+KeyWorld.End+"\\b","");
     		}
     		 
@@ -73,7 +73,7 @@ public class IfInterpretor extends CommandInterpretor{
     
     public static void main(String[] args){
     	String str="If 10=10 \n"+
-    			"Then TracePrint:fdsadf \n"+
+    			"Then TracePrint:15 \n"+
     			"ElseIf false \n"+
     			"Then TracePfds"
     			+ "fdsa"
