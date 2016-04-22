@@ -20,13 +20,13 @@ public class IfInterpretor extends CommandInterpretor{
     		String cmIf=matcher.group(1).replace(KeyWorld.IF,"");    		
     		String cmThen=matcher.group(2).replace(KeyWorld.Then, "").replaceFirst("\\b"+KeyWorld.ElseIf+"\\b", "");
     		if (BananaRunner.getInterpretor(cmIf).interprete(cmIf).equals(KeyWorld.True)){
-    			BananaRunner.getInterpretor(cmThen).interprete(cmThen);
-        		return null;
+    			
+        		return BananaRunner.getInterpretor(cmThen).interprete(cmThen);
             }else {
             	//String cm=matcher.group();
             	String next=command.replaceFirst("(\\bIf\\b[\\w\\W]*?)(\\bThen\\b[\\w\\W]*?\\bElseIf\\b)","");
             	next=KeyWorld.IF+" "+next;
-            	this.interprete(next);
+            	return this.interprete(next);
             }
     	}else{
     		String cmIf="";
@@ -50,13 +50,13 @@ public class IfInterpretor extends CommandInterpretor{
     		 
     		 
     		if (BananaRunner.getInterpretor(cmIf).interprete(cmIf).equals(KeyWorld.True)){
-    			BananaRunner.getInterpretor(cmThen).interprete(cmThen);
-        		return null;
+    			
+        		return BananaRunner.getInterpretor(cmThen).interprete(cmThen);
             }else {
-            	BananaRunner.getInterpretor(cmElse).interprete(cmElse);
+            	return BananaRunner.getInterpretor(cmElse).interprete(cmElse);
             }   		
     	}   	
-        return null;
+        //return null;
     }
     private static IfInterpretor mIfInterpretor;
     private IfInterpretor(){}
@@ -72,7 +72,7 @@ public class IfInterpretor extends CommandInterpretor{
     }
     
     public static void main(String[] args){
-    	String str="If 10=10 \n"+
+    	String str="If 10==10 \n"+
     			"Then TracePrint:15 \n"+
     			"ElseIf false \n"+
     			"Then TracePfds"

@@ -1,6 +1,6 @@
 package com.bw.luzz.monkeyapplication.command;
 
-public class OperatorAddInterpretor extends OperatorInterpretor{
+public class OperatorAddInterpretor extends CheckKeyInterpretor{
 	private static OperatorAddInterpretor mIfInterpretor;
     private OperatorAddInterpretor(){}
     public static OperatorAddInterpretor getInstance(){
@@ -14,7 +14,7 @@ public class OperatorAddInterpretor extends OperatorInterpretor{
         return mIfInterpretor;
     }
 	@Override
-	protected String interprete(String leftResult, String rightResult) {
+	protected String interpreteChecked(String leftResult, String rightResult) {
 		// TODO Auto-generated method stub
 		int left=Integer.valueOf(leftResult);
 		int right=Integer.valueOf(rightResult);

@@ -3,7 +3,7 @@ package com.bw.luzz.monkeyapplication.command;
 /**
  * Created by Luzz on 2016/4/6.
  */
-public class EqualInterpretor extends OperatorInterpretor{
+public class EqualInterpretor extends CheckKeyInterpretor{
 	
     private static EqualInterpretor mEqualInterpretor;
     private EqualInterpretor(){}
@@ -18,7 +18,7 @@ public class EqualInterpretor extends OperatorInterpretor{
         return mEqualInterpretor;
     }
 	@Override
-	protected String interprete(String leftResult, String rightResult) {
+	protected String interpreteChecked(String leftResult, String rightResult) {
 		// TODO Auto-generated method stub
 		if(leftResult.equals(rightResult)){
 			return "true";
@@ -26,4 +26,5 @@ public class EqualInterpretor extends OperatorInterpretor{
 			return "false";
 		}
 	}
+	
 }

@@ -22,4 +22,9 @@ public class KeyWorld {
 	public final static String Delay="Delay";
 	public final static String CmpColor="CmpColor";
     public final static String GetPixelColor="GetPixelColor";
+	public final static String Break="Break";
+	public final static String Continue="Continue";
+	public final static String Return="Return";
+	public final static String Function="Function";
+	public final static String Dim="Dim";
 }

@@ -40,64 +40,25 @@ public class FloatWindowActivity extends AppCompatActivity {
             Toast.makeText(context,"超时结束",Toast.LENGTH_SHORT).show();
         }
     };
-    /*private String jsonData=" [" +
-            "    {" +
-            "      \"mClassName\": \"com.android.launcher3.Launcher\"," +
-            "      \"mAction\": \"click\"," +
-            "      \"mEventType\": \"window\"," +
-            "      \"mNodeType\": \"text\"," +
-            "      \"mTextValue\": \"单机\"" +
-            "    }," +
-            "    {" +
-            "      \"mClassName\": \"cn.cmgame.billing.ui.c\"," +
-            "      \"mAction\": \"click\"," +
-            "      \"mEventType\": \"window\"," +
-            "      \"mNodeType\": \"text\"," +
-            "      \"mTextValue\": \"进入游戏\"" +
-            "    }," +
-            "    {" +
-            "      \"mClassName\": \"com.example.testgetimei.MainActivity\"," +
-            "      \"mAction\": \"click\"," +
-            "      \"mEventType\": \"window\"," +
-            "      \"mNodeType\": \"text\"," +
-            "      \"mTextValue\": \"测试使用1\"" +
-            "    }," +
-            "    {" +
-            "      \"mClassName\": \"cn.cmgame.billing.ui.c\"," +
-            "      \"mAction\": \"click\"," +
-            "      \"mEventType\": \"window\"," +
-            "      \"mNodeType\": \"text\"," +
-            "      \"mTextValue\": \"确认支付\"" +
-            "    }" +
-            "  ]";*/
-    /*private String jsonData=" [" +
-            "    {" +
-            "      \"mClassName\": \"com.android.launch\r\ner2.Launcher\"," +
-            "      \"mAction\": \"click\"," +
-            "      \"mEventType\": \"window\"," +
-            "      \"mNodeType\": \"text\"," +
-            "      \"mTextValue\": \"单机\"" +
-            "    }," +
-            "    {" +
-            "      \"mClassName\": \"com.ex" +
-            "a" +
-            "mple.testge\r\ntimei.MainActivity\"," +
-            "      \"mAction\": \"click\"," +
-            "      \"mEventType\": \"window\"," +
-            "      \"mNodeType\": \"text\"," +
-            "      \"mTextValue\": \"测试使用1\"" +
-            "    }," +
-            "    {" +
-            "      \"mClassName\": \"cn.cmgame.billing.ui.c\"," +
-            "      \"mAction\": \"click\"," +
-            "      \"mEventType\": \"window\"," +
-            "      \"mNodeType\": \"text\"," +
-            "      \"mTextValue\": \"确认支付\"" +
-            "    }" +
-            "  ]";*/
-    private String jsonData="While true \n" +
+
+    /*private String jsonData="While true \n" +
             "Delay 1000 \n"+
-            "TracePrint:GetPixelColor(200,200)  \n" +
+            "TracePrint:\"luzzz\" \n" +
+            "End \n";*/
+    private String jsonData="While true\n" +
+            "Delay 1000 \n"+
+            "If CmpColor(544,1044,-549846)\n" +
+            "Then tap 933 688\n" +
+            "ElseIf CmpColor(544,1044,-2165794)\n" +
+            "Then tap 549 1044\n" +
+            "ElseIf CmpColor(544,1044,-8103631)\n" +
+            "Then tap 80 242\n" +
+            "ElseIf CmpColor(544,1044,-114887)\n" +
+            "Then tap 797 489\n" +
+            "ElseIf CmpColor(544,1044,-1)\n" +
+            "Then tap 741 1027\n" +
+            "Break \n"+
+            "End\n" +
             "End \n";
    // private String jsonData=TestJson.json4;
     @Override

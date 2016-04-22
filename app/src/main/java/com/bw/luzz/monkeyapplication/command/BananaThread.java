@@ -32,13 +32,16 @@ public class BananaThread {
 
     public void run(){
         Thread thread=new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				BananaRunner.execute(coms);
-			}
-		});
+
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+
+                //需要在执行前把定义的变量清空
+                BananaRunner.clearAllKeyWorld();
+                BananaRunner.execute(coms);
+            }
+        });
         thread.setName("bananarunner thread");
         thread.start();
     }
@@ -56,24 +59,22 @@ public class BananaThread {
         return mBananaRunner;
     }
     public static void main(String[] args){
-    	BananaThread bn= BananaThread.getInstance();
-    	String script="TracePrint:游戏kais \n"+
-    			"If  \"a\" = \"a\" \n" +
+        BananaThread bn= BananaThread.getInstance();
+        String script="TracePrint:游戏kais \n"+
+                "If  \"a\" = \"a\" \n" +
                 "Then TracePrint: helloee \n" +
-    			"Delay 6000 \n"+
-    			"TracePrint:what \n"+
-    			"End \n"+
+                "Delay 6000 \n"+
+                "TracePrint:what \n"+
+                "End \n"+
                 "If  \"a\" = \"b\" \n" +
                 "Then TracePrint: secod \n"+
                 "If dfs\n"+
                 "End \n"+
                 "End \n"+
                 "TracePrint:游戏结束";
-    	bn.setScript(script);
-    	bn.run();
-    	
+        bn.setScript(script);
+        bn.run();
+
     }
-
-
 
 }

@@ -22,8 +22,8 @@ public class TracePrintInterpreor  extends CommandInterpretor{
     }
 
     private void printResult(String result) {
-        //Log.d("BananaService","pirnt:"+result);
-        System.out.print(""+result);
+        Log.d("BananaService","pirnt:"+result);
+        //System.out.print(""+result);
     }
 
     private static TracePrintInterpreor mTracePrintInterpreor;

@@ -1,4 +1,4 @@
-package com.bw.luzz.monkeyapplication.command;
+ package com.bw.luzz.monkeyapplication.command;
 
 import java.util.Stack;
 import java.util.regex.Matcher;
@@ -16,13 +16,13 @@ public abstract class OperatorInterpretor extends CommandInterpretor{
 	private final static String OperatorMultiply="*";
 	private final static String OperatorDivide="/";
 	private final static String OperatorMod="\\bmod\\b";
-	private final static String OperatorEqual="=";
-	
+	private final static String OperatorEqual="==";
+	private final static String OperatorAssign="[^=]=[^=]";
 	
 	//private final static String PriorityFormLeft="([\\w\\W]*$)";
-	private final static String PriorityMax="([+-])|(\\bmod\\b)";
-	private final static String PriorityMid="[*/]";
-	private final static String PriorityMin="=";
+	private final static String PriorityMax="([+-])";
+	private final static String PriorityMid="[*/]|(\\bmod\\b)";
+	private final static String PriorityMin="(?<=[\\w\\s])=(?=[\\w\\s])|(==)";
 	Pattern min=Pattern.compile(PriorityMin);
 	
 	Pattern mid=Pattern.compile(PriorityMid);
@@ -38,14 +38,32 @@ public abstract class OperatorInterpretor extends CommandInterpretor{
 		Matcher mb=mid.matcher(command);
 		Matcher mc=max.matcher(command);
 		String priority="";
-		
+		//操作符的长度。
 		int offset=1;
 		
 		if(ma.find()){
 			//String[] coms=command.split(PriorityMin);
 			priority=PriorityMin;
-			if(ma.group(ma.groupCount()).equals("="))
-				childs.push(EqualInterpretor.getInstance());		
+			//String temp=ma.group(ma.groupCount());
+			/*if(ma.group(2).equals(OperatorEqual)){
+				offset=2;
+				childs.push(EqualInterpretor.getInstance());
+			}
+				
+			
+			if(ma.group(2).equals(OperatorEqual)){
+				childs.push(EqualInterpretor.getInstance());
+				offset=1;
+			}*/
+			if(command.contains(OperatorEqual)){
+				offset=2;
+				childs.push(EqualInterpretor.getInstance());
+			}else{
+				childs.push(AssignInterpertor.getInstance());
+				offset=1;
+			}
+			
+		
 			
 		}else if(mb.find()){
 			priority=PriorityMid;
@@ -54,6 +72,7 @@ public abstract class OperatorInterpretor extends CommandInterpretor{
 			String op=mc.group(mc.groupCount()-1);
 			if(op.equals("+")){
 				childs.push(OperatorAddInterpretor.getInstance());
+				offset=1;
 			}
 		}else{
 			RunResult.throwErro("未知错误在解析表达式时发生："+command);
@@ -63,9 +82,20 @@ public abstract class OperatorInterpretor extends CommandInterpretor{
 		String left=command.substring(0, command.length()-right.length()-offset);
 		String leftResult= BananaRunner.execute(left);
 		String rightResult= BananaRunner.execute(right);
+		
 		return childs.pop().interprete(leftResult,rightResult);
 	}
 	
 	protected abstract String interprete(String leftResult,String rightResult);
-
+	public static void main(String[] args){
+		/*String regex="(?<=[\\w\\s])=(?=[\\w\\s])";
+		String input="i=13";
+		String[] argfs=input.split(regex);
+		System.out.println(argfs[0]);
+		System.out.println(argfs[1]);*/
+		String command="i==4";
+		SimpleOperator.getInstance().interprete(command);
+		
+		
+	}
 }

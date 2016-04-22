@@ -22,7 +22,13 @@ public class WhileInterpretor extends CommandInterpretor{
 		String body=matcher.group(2).replaceFirst("\\s*End$","");
 		
 		while(BananaRunner.judge(condition)){
-			BananaRunner.execute(body);
+			String result=BananaRunner.execute(body);
+			if(result!=null&&result.equals(KeyWorld.Break)){
+				break;
+			}
+			if(result!=null&&BananaRunner.execute(body).equals(KeyWorld.Continue)){
+				continue;
+			}
 		}				
 		return null;
 	}
@@ -44,10 +50,12 @@ public class WhileInterpretor extends CommandInterpretor{
 	
     
     public static void main(String[] args){
-    	 String test="While false\n"+
-    			 		"TracePrint:hello\n"+
+    	 String test="While true\n"+
+    			 		"TracePrint:4\n"+
     			 		"TracePrint:2\n"+
+    			 		"Continue \n"+
     			 		"TracePrint:3\n"+
+    			 		
     			 		"End";
     	 WhileInterpretor.getInstance().interprete(test);
     }
