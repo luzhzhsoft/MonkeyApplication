@@ -6,12 +6,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import android.graphics.YuvImage;
-import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import android.os.Environment;
-import android.os.IInterface;
-import android.os.RemoteCallbackList;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Surface;
@@ -249,5 +245,54 @@ public class BitmapUtil {
         //return x*1000+y;
     }
 
+
+    /**
+     * @param x
+     * @param y
+     * @param color
+     * @param fraction 骗色范围 ， 取值0~1 取0时一定会返回false
+     * @param context
+     * @return
+     */
+    public static boolean cmpColor(int x,int y,int color,float fraction,Context context){
+        int screenColor=getPixelColor(x,y,context);
+       // Rect colorRect=colorToRgb(screenColor);
+        return cmpColorARGB(color, screenColor, fraction);
+
+    }
+
+    public static boolean cmpColorARGB(int color, int target, float fraction) {
+        int startA = (color >> 24) & 0xff;
+        int startR = (color >> 16) & 0xff;
+        int startG = (color >> 8) & 0xff;
+        int startB = color & 0xff;
+
+
+        int endA=(int)(startA*fraction);
+        int endR=(int)(startR*fraction);
+        int endG=(int)(startG*fraction);
+        int endB=(int)(startB*fraction);
+
+        int[] colorR=colorToRgb(target);
+
+        return ((colorR[0] >= endA) && (colorR[0] <= startA))
+                && ((colorR[1] >= endR) && (colorR[1] <= startR))
+                && ((colorR[2] >= endG) && (colorR[2] <= startG))
+                && ((colorR[3] >= endB) && (colorR[3] <= startB));
+    }
+
+    /**
+     * @param color
+     * @return
+     */
+    public static int[] colorToRgb(int color){
+        int startA = (color >> 24) & 0xff;
+        int startR = (color >> 16) & 0xff;
+        int startG = (color >> 8) & 0xff;
+        int startB = color & 0xff;
+
+
+        return new int[]{startA,startR,startG,startB};
+    }
 
 }
