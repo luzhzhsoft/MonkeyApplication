@@ -30,7 +30,7 @@ public abstract class OperatorInterpretor extends CommandInterpretor{
 	/*private final static Matcher addMatcher=Pattern.compile(Oper)*/
 
 	@Override
-	public final String interprete(String command) {
+	public final String interprete(String command) throws InterruptedException {
 		// TODO Auto-generated method stub
 		//������ȼ����н���
 
@@ -94,7 +94,7 @@ public abstract class OperatorInterpretor extends CommandInterpretor{
 		System.out.println(argfs[0]);
 		System.out.println(argfs[1]);*/
 		String command="i==4";
-		SimpleOperator.getInstance().interprete(command);
+		//SimpleOperator.getInstance().interprete(command);
 		
 		
 	}

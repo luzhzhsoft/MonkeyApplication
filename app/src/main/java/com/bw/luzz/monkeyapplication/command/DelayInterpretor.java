@@ -3,7 +3,7 @@ package com.bw.luzz.monkeyapplication.command;
 public class DelayInterpretor extends CommandInterpretor{
 
 	@Override
-	public String interprete(String command) {
+	public String interprete(String command) throws InterruptedException {
 		// TODO Auto-generated method stub
 		command.trim();
 		String[] coms=command.split(" ");
@@ -16,12 +16,9 @@ public class DelayInterpretor extends CommandInterpretor{
 		}
 		long timeDealy= Long.valueOf(coms[1].trim());
 		
-		try {
+
 			Thread.sleep(timeDealy);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		return null;
 	}
 	private static DelayInterpretor mDelayInterpretor;

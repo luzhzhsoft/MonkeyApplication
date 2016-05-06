@@ -41,25 +41,26 @@ public class FloatWindowActivity extends AppCompatActivity {
         }
     };
 
-    /*private String jsonData="While true \n" +
+    private String jsonData2="While true \n" +
             "Delay 1000 \n"+
-            "TracePrint:\"luzzz\" \n" +
-            "End \n";*/
-    private String jsonData="While true\n" +
+            "TracePrint:\"aaa\" \n" +
+            "End \n";
+    /*private String jsonData="While true\n" +
             "Delay 1000 \n"+
-            "If CmpColor(544,1044,-549846)\n" +
-            "Then tap 933 688\n" +
-            "ElseIf CmpColor(544,1044,-2165794)\n" +
+            "If CmpColor(100,200,-16769755)\n" +
+            "Then tap 415 457\n" +
+            "ElseIf CmpColor(100,200,-2165794)\n" +
             "Then tap 549 1044\n" +
-            "ElseIf CmpColor(544,1044,-8103631)\n" +
+            "ElseIf CmpColor(100,200,-8103631)\n" +
             "Then tap 80 242\n" +
-            "ElseIf CmpColor(544,1044,-114887)\n" +
+            "ElseIf CmpColor(100,200,-114887)\n" +
             "Then tap 797 489\n" +
-            "ElseIf CmpColor(544,1044,-1)\n" +
+            "ElseIf CmpColor(100,200,-1)\n" +
             "Then tap 741 1027\n" +
             "Break \n"+
             "End\n" +
-            "End \n";
+            "End \n";*/
+    private String jsonData="StartActivity:com.bw.luzz.monkeyapplication \n";
    // private String jsonData=TestJson.json4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,6 +216,15 @@ public class FloatWindowActivity extends AppCompatActivity {
             mB.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Message message=Message.obtain(null,BananaService.RUN_SCRIPT);
+                    Bundle data=new Bundle();
+                    data.putString(BananaService.SCRIPT,jsonData2);
+                    message.setData(data);
+                    try {
+                        bananaService.send(message);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
             this.addView(v);

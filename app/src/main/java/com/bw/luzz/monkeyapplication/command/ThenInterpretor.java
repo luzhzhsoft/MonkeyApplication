@@ -7,7 +7,7 @@ package com.bw.luzz.monkeyapplication.command;
 public class ThenInterpretor extends CommandInterpretor{
     private boolean IsExecute=true;
     @Override
-    public String interprete(String command) {
+    public String interprete(String command) throws InterruptedException {
         if(IsExecute){
             CommandInterpretor CI= BananaRunner.getInterpretor(command);
             return CI.interprete(command.replace("Then",""));

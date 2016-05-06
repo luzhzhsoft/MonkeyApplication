@@ -15,7 +15,7 @@ public class DimInterpretor extends CommandInterpretor implements IValue{
     private int hasScope=0;
     //\bDim\b\s*\w\s*=\s*\w*
     @Override
-    public String interprete(String command) {
+    public String interprete(String command) throws InterruptedException {
     	command=command.trim();
     	if(command.trim().startsWith(KeyWorld.Dim)){
     		String cmd=command.trim().replaceFirst("\\b"+KeyWorld.Dim+"\\b","").trim();

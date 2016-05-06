@@ -27,4 +27,6 @@ public class KeyWorld {
 	public final static String Return="Return";
 	public final static String Function="Function";
 	public final static String Dim="Dim";
+
+	public final static String StartActivity="StartActivity";
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bw.luzz.monkeyapplication">
+    package="com.bw.luzz.monkeyapplication"
+>
 
     <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
     <uses-permission android:name="android.permission.GET_TASKS" />
@@ -8,6 +9,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.INTERNET" />
+    //截图需要的权限
+    <uses-permission android:name="android.permission.READ_FRAME_BUFFER" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
         android:allowBackup="true"
@@ -22,9 +26,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"></activity>
 
-        </activity>
         <service
             android:name=".MonkeyService"
             android:enabled="true"
@@ -40,9 +43,17 @@
                 android:resource="@xml/monkey_service_config" />
         </service>
 
-        <activity android:name=".LayoutAnim">
+        <activity android:name=".LayoutAnim"></activity>
 
-        </activity>
+        <service
+            android:name=".BananaService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":banana">
+            <intent-filter>
+                <action android:name="com.bw.luzz.monkeyapplication.BananaService"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

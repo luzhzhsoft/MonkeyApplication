@@ -32,7 +32,6 @@ public class MonkeyInput {
         put("joystick", InputDevice.SOURCE_JOYSTICK);
     }};
 
-
     /**
      * Command-line entry point.
      *
@@ -258,6 +257,7 @@ public class MonkeyInput {
             Method injectInputEvent=clzz.getDeclaredMethod("injectInputEvent",new Class<?>[]{InputEvent.class,int.class});
             inputManager=(InputManager)getInstance.invoke(null, null);
             injectInputEvent.invoke(inputManager,event,mode);
+            Log.d("Input","END");
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());

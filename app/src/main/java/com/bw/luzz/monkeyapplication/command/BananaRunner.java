@@ -1,5 +1,9 @@
 package com.bw.luzz.monkeyapplication.command;
 
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.ViewGroup;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -9,7 +13,11 @@ import java.util.regex.Pattern;
  */
 public class BananaRunner {
 	private static Map<String,CommandInterpretor> keyworldMap=new HashMap<>();
-	public static CommandInterpretor getInterpretor(String command){
+	public static CommandInterpretor getInterpretor(String command) throws InterruptedException {
+		if(Thread.interrupted()){
+			Log.d("BananaService","interrupted");
+			throw new InterruptedException("线程终止");
+		}
 		String cmd=command.trim();
 
 		String circul="((If)|(While)|(For)|(Switch))[\\w\\W]*End$";
@@ -40,6 +48,8 @@ public class BananaRunner {
 			return DimInterpretor.getInstance();
 		}else if(commandKey[0].startsWith(KeyWorld.CmpColor)){
 			return CmpColorInterpretor.getInstance(BananaThread.getInstance().getContext());
+		}else if(commandKey[0].startsWith(KeyWorld.StartActivity)){
+			return StartActivityInterpretor.getInstance(BananaThread.getInstance().getContext());
 		}else if(commandKey[0].startsWith(KeyWorld.GetPixelColor)){
 			return GetPixelColorInterpretor.getInstance(BananaThread.getInstance().getContext());
 		}else if(keyworldMap.containsKey(commandKey[0])){
@@ -64,7 +74,7 @@ public class BananaRunner {
 			}
 		}
 	}
-	public static boolean judge(String condition){
+	public static boolean judge(String condition) throws InterruptedException {
 		String re=execute(condition);
 		Boolean is=Boolean.valueOf(re);
 		if(is.booleanValue()){
@@ -74,8 +84,13 @@ public class BananaRunner {
 		}
 
 	}
-	public static String execute(String command){
-		return BananaRunner.getInterpretor(command).interprete(command);
+	public static String execute(String command) throws InterruptedException {
+			if(Thread.interrupted()){
+				throw new InterruptedException();
+			}
+			return BananaRunner.getInterpretor(command).interprete(command);
+
+
 	}
 
 
@@ -123,7 +138,10 @@ public class BananaRunner {
 				+ "Break \n" +
 				"End\n" +
 				"End \n";
-		BananaRunner.execute(jsonData);
+
+			//BananaRunner.execute(jsonData);
+
+
 	}
 
 }

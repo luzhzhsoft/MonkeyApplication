@@ -24,6 +24,6 @@ public class SimpleOperator extends OperatorInterpretor{
 	    	String str="If 12=10+2 \n"+
 	    				"Then TracePrint:Hello \n"+
 	    				"End";
-	    	SimpleOperator.getInstance().interprete(str);
+	    	//SimpleOperator.getInstance().interprete(str);
 	    }
 }

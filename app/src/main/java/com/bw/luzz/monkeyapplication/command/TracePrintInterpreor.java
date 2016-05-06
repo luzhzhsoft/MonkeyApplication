@@ -9,7 +9,7 @@ import android.util.Log;
  */
 public class TracePrintInterpreor  extends CommandInterpretor{
     @Override
-    public String interprete(String command) {
+    public String interprete(String command) throws InterruptedException {
         //Log.d("BananaService",""+command);
         //System.out.print(""+command);
         String delTitle=command.replace("TracePrint:","").trim();

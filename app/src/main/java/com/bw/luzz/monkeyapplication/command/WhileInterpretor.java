@@ -7,7 +7,7 @@ public class WhileInterpretor extends CommandInterpretor{
 	
 	private static final String regex="(While[\\w\\W]*?\n)([\\w\\W]*?\\s*End$)";
 	@Override
-	public String interprete(String command) {
+	public String interprete(String command) throws InterruptedException {
 		// TODO Auto-generated method stub
 
 		Pattern p=Pattern.compile(regex);
@@ -57,7 +57,7 @@ public class WhileInterpretor extends CommandInterpretor{
     			 		"TracePrint:3\n"+
     			 		
     			 		"End";
-    	 WhileInterpretor.getInstance().interprete(test);
+    	 //WhileInterpretor.getInstance().interprete(test);
     }
 	
 }

@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
  */
 public class IfInterpretor extends CommandInterpretor{
     @Override
-    public String interprete(String command) {
+    public String interprete(String command) throws InterruptedException {
     	
     	// \bIf\b[\w\W]*?\bThen\b[\w\W]*?\bElseIF\b
     	//\bIf\b[\w\W]*?\bThen\b[\w\W]*?\bElse\b[\w\W]*\bEnd\b
@@ -80,6 +80,6 @@ public class IfInterpretor extends CommandInterpretor{
     			+ "dfsgdsElseIfrint:iggyf \n"+
     			"Else TracePrint:luzzz\n"+
     			"End";
-    	IfInterpretor.getInstance().interprete(str);
+    	//IfInterpretor.getInstance().interprete(str);
     }
 }

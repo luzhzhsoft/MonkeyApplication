@@ -1,6 +1,7 @@
 package com.bw.luzz.monkeyapplication;
 
 import android.accessibilityservice.AccessibilityService;
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,8 @@ import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
@@ -25,7 +28,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MonkeyService extends AccessibilityService {
-
     public static final String COMMAND_RESULT = "COMMAND_RESULT";
     private static String DEBUG = "test";
     /*    public static final String DEBUG="test";*/
@@ -48,7 +50,7 @@ public class MonkeyService extends AccessibilityService {
             /*setData(intent.getStringExtra("json"));
             parseJson();
             performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME);*/
-            MonkeyTask monkeyTask=new MonkeyTask("tap 928 675",1);
+            MonkeyTask monkeyTask=new MonkeyTask("tap 944 688",1);
             MonkeyTask monkeyTask1 = new MonkeyTask("tap 578 1024",2);
             MonkeyTask monkeyTask2 = new MonkeyTask("tap 799 482",3);
            // MonkeyTask monkeyTask3 = new MonkeyTask("input tap 814 1024",3);
@@ -83,7 +85,8 @@ public class MonkeyService extends AccessibilityService {
 
         @Override
         public void run() {
-            new Thread(){
+            MonkeyInput.sendCommands(cmd.split(" "));
+            /*new Thread(){
                 @Override
                 public void run() {
                     super.run();
@@ -131,7 +134,7 @@ public class MonkeyService extends AccessibilityService {
 
 
             }
-            Log.d(DEBUG,"线程成功结束");
+            Log.d(DEBUG,"线程成功结束");*/
 
 
         }
@@ -258,7 +261,7 @@ public class MonkeyService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
 
-        int eventType = event.getEventType();
+        /*int eventType = event.getEventType();
         String className = event.getClassName().toString();
         //Log.d(DEBUG,"classname::"+className);
         mhandler.removeMessages(1);
@@ -267,7 +270,7 @@ public class MonkeyService extends AccessibilityService {
             msg.what = 1;
             mhandler.sendMessageDelayed(msg, 5000);
         }
-        /*if(nameNumber<classNames.size()){
+        *//*if(nameNumber<classNames.size()){
             String str=classNames.get(nameNumber);
             if(className.equals(str)){
                 long tmep=startTime;
@@ -292,13 +295,13 @@ public class MonkeyService extends AccessibilityService {
             }else {
                // Log.d(DEBUG,"脚本即将结束");
             }
-        }*/
+        }*//*
         //lastClassName=className;
         eventCommandIterator = commands.iterator();
         while (eventCommandIterator.hasNext()) {
             EventCommand e = eventCommandIterator.next();
             executeCommand(eventType, className, e);
-        }
+        }*/
     }
 
     private void executeCommand(int eventType, String className, EventCommand e) {
@@ -329,7 +332,6 @@ public class MonkeyService extends AccessibilityService {
             eventCommandIterator.remove();
         }
     }
-
     @Override
     protected boolean onKeyEvent(KeyEvent event) {
         return super.onKeyEvent(event);
