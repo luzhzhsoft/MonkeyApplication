@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -26,6 +27,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.bw.luzz.monkeyapplication.View.ArcProgressStackView;
+
+import java.util.ArrayList;
+
 public class FloatWindowActivity extends AppCompatActivity {
     Button mStartButton;
     private WindowManager mWindowManager;
@@ -41,10 +46,10 @@ public class FloatWindowActivity extends AppCompatActivity {
         }
     };
 
-    private String jsonData2="While true \n" +
+ /*   private String jsonData2="While true \n" +
             "Delay 1000 \n"+
             "TracePrint:\"aaa\" \n" +
-            "End \n";
+            "End \n";*/
     /*private String jsonData="While true\n" +
             "Delay 1000 \n"+
             "If CmpColor(100,200,-16769755)\n" +
@@ -116,8 +121,9 @@ public class FloatWindowActivity extends AppCompatActivity {
                         long endTime = System.currentTimeMillis() - startTime;
                         if (endTime <= 300) {
                             hideWidow(deskLayout);
+                            Intent i=new Intent(getApplicationContext(),FloatWindowActivity.class);
+                            startActivity(i);
                         }
-                        Toast.makeText(getApplicationContext(), "" + endTime, Toast.LENGTH_SHORT).show();
                         startTime = System.currentTimeMillis();
 
                         break;
@@ -176,6 +182,14 @@ public class FloatWindowActivity extends AppCompatActivity {
     }
 
     public class DeskLayout extends LinearLayout{
+        public final static int MODEL_COUNT = 4;
+
+
+        // APSV
+        private ArcProgressStackView mArcProgressStackView;
+        // Parsed colors
+        private int[] mStartColors = new int[MODEL_COUNT];
+        private int[] mEndColors = new int[MODEL_COUNT];
 
         private Messenger bananaService;
 
@@ -185,7 +199,8 @@ public class FloatWindowActivity extends AppCompatActivity {
             this.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             View v= LayoutInflater.from(context).inflate(R.layout.float_window_layout,null);
-            Button mStartButton=(Button)v.findViewById(R.id.exe_btn);
+
+            /*Button mStartButton=(Button)v.findViewById(R.id.exe_btn);
             Button mA=(Button)v.findViewById(R.id.jiao_a);
             Button mB=(Button)v.findViewById(R.id.jiao_b);
             mStartButton.setOnClickListener(new OnClickListener() {
@@ -199,9 +214,9 @@ public class FloatWindowActivity extends AppCompatActivity {
             mA.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*Intent i=new Intent(MonkeyService.class.getName());
+                    *//*Intent i=new Intent(MonkeyService.class.getName());
                     i.putExtra("json",jsonData);
-                    mLocalBroadcaseManager.sendBroadcast(i);*/
+                    mLocalBroadcaseManager.sendBroadcast(i);*//*
                     Message message=Message.obtain(null,BananaService.RUN_SCRIPT);
                     Bundle data=new Bundle();
                     data.putString(BananaService.SCRIPT,jsonData);
@@ -226,8 +241,28 @@ public class FloatWindowActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-            });
+            });*/
             this.addView(v);
+            // Get APSV
+            mArcProgressStackView = (ArcProgressStackView) v.findViewById(R.id.apsv);
+            // Get colors
+            final String[] startColors = getResources().getStringArray(R.array.polluted_waves);
+            final String[] endColors = getResources().getStringArray(R.array.default_preview);
+            final String[] bgColors = getResources().getStringArray(R.array.medical_express);
+
+            // Parse colors
+            for (int i = 0; i < MODEL_COUNT; i++) {
+                mStartColors[i] = Color.parseColor(startColors[i]);
+                mEndColors[i] = Color.parseColor(endColors[i]);
+            }
+
+            final ArrayList<ArcProgressStackView.Model> models = new ArrayList<>();
+            models.add(new ArcProgressStackView.Model("RED  210", 25, Color.parseColor("#ff890000"), mStartColors[0]));
+            models.add(new ArcProgressStackView.Model("GREEN 120", 50, Color.parseColor(bgColors[1]), mStartColors[1]));
+            models.add(new ArcProgressStackView.Model("BLUE 100", 75, Color.parseColor(bgColors[2]), mStartColors[2]));
+            models.add(new ArcProgressStackView.Model("INT -1024512", 100, Color.parseColor(bgColors[3]), mStartColors[3]));
+
+            mArcProgressStackView.setModels(models);
         }
 
         @Override

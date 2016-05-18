@@ -1,4 +1,33 @@
 <resources>
-    <string name="app_name">MonkeyApplication</string>
+    <string name="app_name">Android 工具盒</string>
     <string name="action_settings">Settings</string>
+
+    <string name="title_activity_main">MainActivity</string>
+    <string name="hello_world">Hello world!</string>
+
+    <string name="text_web_ceo">没有产品</string>
+    <string name="text_web_dev">没有美工</string>
+    <string name="text_e_commerce">只有盗图</string>
+
+
+    <string name="text_main_desc">您还没有脚本，点击文字或者点击\n悬浮按钮添加脚本</string>
+
+
+    <string name="title_activity_add_reminder">添加脚本</string>
+    <string name="title_activity_edit_reminder">编辑脚本</string>
+    <string name="title_activity_licenses">Licenses</string>
+
+    <string name="add_reminder">脚本</string>
+    <string name="details">开发选项</string>
+    <string name="color">取色命令</string>
+    <string name="time">延时命令</string>
+    <string name="repeat">循环</string>
+    <string name="repeat_off">Off</string>
+    <string name="repeat_no">脚本名称</string>
+    <string name="repeat_type">脚本名字</string>
+
+    <string name="action_discard_reminder">放弃修改</string>
+    <string name="action_save_reminder">保存脚本</string>
+    <string name="select_color_des">使用“劫色”工具，对屏幕颜色进行选取</string>
+    <string name="no_reminders">您还没有脚本，点击\n悬浮按钮添加脚本!</string>
 </resources>

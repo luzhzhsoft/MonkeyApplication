@@ -2,9 +2,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.bw.luzz.monkeyapplication.MainActivity">
+
+    <item
+        android:id="@+id/action_script"
+        android:orderInCategory="0"
+        android:title="编辑"
+        app:showAsAction="always"
+        android:icon="@drawable/selector_action_script"/>
+    <item
+        android:id="@+id/action_connetion"
+        android:orderInCategory="0"
+        android:title="连接"
+        app:showAsAction="always"
+        android:icon="@drawable/title_logo_two"/>
+    <item
+        android:id="@+id/action_tool"
+        android:orderInCategory="0"
+        android:title="工具"
+        app:showAsAction="always"
+        android:icon="@drawable/title_logo_two"/>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
+
         android:title="@string/action_settings"
         app:showAsAction="never" />
 </menu>

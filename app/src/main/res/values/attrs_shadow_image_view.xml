@@ -1,0 +1,9 @@
+<resources>
+    <declare-styleable name="ShadowImageView">
+        <attr name="shadowColor" format="color" />
+        <attr name="setShadow" format="boolean"/>
+        <attr name="shadowY" format="dimension" />
+        <attr name="shadowRadius" format="dimension" />
+        <attr name="shadowX" format="dimension" />
+    </declare-styleable>
+</resources>

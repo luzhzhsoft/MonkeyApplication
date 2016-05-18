@@ -19,10 +19,10 @@ public class ThenInterpretor extends CommandInterpretor{
         this.IsExecute=isExecute;
     }
     private static ThenInterpretor mThenInterpretor;
-    private ThenInterpretor(){
+    private ThenInterpretor() throws InterruptedException {
     	RunResult.throwErro("执行了Then，应该以if开始");
     }
-    public static ThenInterpretor getInstance(){
+    public static ThenInterpretor getInstance() throws InterruptedException {
         if(mThenInterpretor==null){
             synchronized (ThenInterpretor.class){
                 if(mThenInterpretor==null){

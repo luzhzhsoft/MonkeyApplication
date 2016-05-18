@@ -3,7 +3,7 @@ package com.bw.luzz.monkeyapplication.command;
 public class SimpleOperator extends OperatorInterpretor{
 
 	@Override
-	protected String interprete(String leftResult, String rightResult) {
+	protected String interprete(String leftResult, String rightResult) throws InterruptedException {
 		// TODO Auto-generated method stub
 		RunResult.throwErro("使用这个方法，没有任何意义╮(╯▽╰)╭");
 		return null;

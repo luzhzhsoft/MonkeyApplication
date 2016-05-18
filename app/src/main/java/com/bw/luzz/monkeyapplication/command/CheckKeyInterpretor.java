@@ -3,7 +3,7 @@ package com.bw.luzz.monkeyapplication.command;
 public abstract class CheckKeyInterpretor extends OperatorInterpretor{
 
 	@Override
-	protected final String interprete(String leftResult, String rightResult) {
+	protected final String interprete(String leftResult, String rightResult) throws InterruptedException {
 		// TODO Auto-generated method stub
 		leftResult=leftResult.trim();
 		rightResult=rightResult.trim();
@@ -15,7 +15,7 @@ public abstract class CheckKeyInterpretor extends OperatorInterpretor{
 	}
 	
 	protected abstract String interpreteChecked(String leftResult,String rightResult );
-	private String getValueCheckKey(String key){
+	private String getValueCheckKey(String key) throws InterruptedException {
 		if(BananaRunner.containKey(key)){
 			//(IValue)(BananaRunner.get(key));
 			IValue valuecontains;

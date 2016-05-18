@@ -86,7 +86,7 @@ public abstract class OperatorInterpretor extends CommandInterpretor{
 		return childs.pop().interprete(leftResult,rightResult);
 	}
 	
-	protected abstract String interprete(String leftResult,String rightResult);
+	protected abstract String interprete(String leftResult,String rightResult) throws InterruptedException;
 	public static void main(String[] args){
 		/*String regex="(?<=[\\w\\s])=(?=[\\w\\s])";
 		String input="i=13";

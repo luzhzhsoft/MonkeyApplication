@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
-    <Button
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <!--<Button
         android:id="@+id/exe_btn"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
@@ -20,5 +21,32 @@
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:text="B"
-        android:layout_margin="5dp"/>
+        android:layout_margin="5dp"/>-->
+    <com.bw.luzz.monkeyapplication.View.ArcProgressStackView
+        android:id="@+id/apsv"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        app:apsv_rounded="true"
+        app:apsv_shadowed="true"
+        app:apsv_animated="true"
+        app:apsv_dragged="false"
+        app:apsv_text_color="#fff"
+        app:apsv_shadow_distance="5dp"
+        app:apsv_shadow_angle="90"
+        app:apsv_shadow_radius="3dp"
+        app:apsv_shadow_color="#000"
+        app:apsv_animation_duration="1000"
+        app:apsv_interpolator="@android:anim/bounce_interpolator"
+        app:apsv_draw_width="75%"
+        app:apsv_model_offset="3dp"
+        app:apsv_model_bg_enabled="false"
+        app:apsv_start_angle="270"
+        app:apsv_sweep_angle="360"
+        app:apsv_indicator_orientation="vertical"
+        app:apsv_preview_colors="@array/default_preview"
+        app:apsv_preview_bg="#ccc"/>
+   <!-- <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />-->
 </LinearLayout>

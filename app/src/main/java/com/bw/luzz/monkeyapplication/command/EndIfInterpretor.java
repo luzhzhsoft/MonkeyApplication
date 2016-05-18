@@ -10,10 +10,10 @@ public class EndIfInterpretor extends CommandInterpretor{
         return null;
     }
     private static EndIfInterpretor mEndIfInterpretor;
-    private EndIfInterpretor(){
+    private EndIfInterpretor() throws InterruptedException {
     	RunResult.throwErro("执行了 EndIf。if循环写错了");
     }
-    public static EndIfInterpretor getInstance(){
+    public static EndIfInterpretor getInstance() throws InterruptedException {
         if(mEndIfInterpretor==null){
             synchronized (EndIfInterpretor.class){
                 if(mEndIfInterpretor==null){

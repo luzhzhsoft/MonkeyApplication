@@ -21,7 +21,7 @@ public class CmpColorInterpretor extends CommandInterpretor{
     //cmpColor(100,200,-5400121,0.9)
     //
     @Override
-    public String interprete(String command) {
+    public String interprete(String command) throws InterruptedException {
         String noBlankCommand=command.trim().replace(" ","");
         //没有相似参数
         String rex="CmpColor\\((\\d+),(\\d+),([-]?\\d+)\\)";

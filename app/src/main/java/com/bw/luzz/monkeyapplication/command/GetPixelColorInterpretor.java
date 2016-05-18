@@ -16,7 +16,7 @@ public class GetPixelColorInterpretor extends CommandInterpretor{
     //GetPixelColor(100,200,-544009)
     //cmpColor\((\d+),(\d+),([-]?\d+)\)
     @Override
-    public String interprete(String command) {
+    public String interprete(String command) throws InterruptedException {
         String noBlankCommand=command.trim().replace(" ","");
         String rex="GetPixelColor\\((\\d+),(\\d+)\\)";
         Matcher matcher= Pattern.compile(rex).matcher(noBlankCommand);

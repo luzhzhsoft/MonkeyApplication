@@ -70,7 +70,9 @@ public class BananaRunner {
 			}else if(mach2.matches()||mach3.matches()){
 				return BaseValueInterpretor.getInstance();
 			}else{
-				throw new RuntimeException("不支持的语法"+cmd);
+				//throw new RuntimeException("不支持的语法"+cmd);
+				RunResult.throwErro("不支持的语法:"+cmd);
+				return null;
 			}
 		}
 	}

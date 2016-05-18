@@ -81,7 +81,7 @@ public class DimInterpretor extends CommandInterpretor implements IValue{
             }
 
             @Override
-            public void onCircleEnd() {
+            public void onCircleEnd() throws InterruptedException {
                 scope--;
                 if(scope<0)RunResult.throwErro("内部错误，解析出错。请联系开发者");
                 if(scope>0&&hasScope>=scope){

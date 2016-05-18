@@ -18,7 +18,7 @@ public class StartActivityInterpretor extends CommandInterpretor{
      * @return 返回null吧
      */
     @Override
-    public String interprete(String command) {
+    public String interprete(String command) throws InterruptedException {
         command=command.trim();
         command=command.replace(KeyWorld.StartActivity+":","").trim();
         if(DEBUG){

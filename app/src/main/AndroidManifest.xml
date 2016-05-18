@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bw.luzz.monkeyapplication"
->
+    package="com.bw.luzz.monkeyapplication">
 
     <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
     <uses-permission android:name="android.permission.GET_TASKS" />
@@ -9,6 +8,12 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- used for drawing widget. This permission must be granted before calling AudioWidget.show(). -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
+    <!-- used for notifing user that he is about to remove widget when he drags it on remove widget icon. -->
+    <!-- This permission granted by default on Android 6.0+ devices. -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
     //截图需要的权限
     <uses-permission android:name="android.permission.READ_FRAME_BUFFER" />
     <uses-permission android:name="android.permission.GET_TASKS" />
@@ -19,15 +24,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FloatWindowActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".MainActivity"></activity>
-
+        <activity android:name=".FloatWindowActivity"></activity>
         <service
             android:name=".MonkeyService"
             android:enabled="true"
@@ -43,7 +40,7 @@
                 android:resource="@xml/monkey_service_config" />
         </service>
 
-        <activity android:name=".LayoutAnim"></activity>
+        <!--<activity android:name=".LayoutAnim" />-->
 
         <service
             android:name=".BananaService"
@@ -51,9 +48,26 @@
             android:exported="true"
             android:process=":banana">
             <intent-filter>
-                <action android:name="com.bw.luzz.monkeyapplication.BananaService"/>
+                <action android:name="com.bw.luzz.monkeyapplication.BananaService" />
             </intent-filter>
         </service>
+
+        <activity android:name=".slidingtutorial.SpalashActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity">
+
+        </activity>
+        <activity android:name=".ReminderAddActivity"
+            android:launchMode="singleTask">
+        </activity>
+        <activity android:name=".ReminderEditActivity"
+            android:launchMode="singleTask"/>
     </application>
 
 </manifest>

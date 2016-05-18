@@ -115,7 +115,7 @@ public class CellInterpretor extends CommandInterpretor {
     public interface Listener {
         void onCircleBegin();
 
-        void onCircleEnd();
+        void onCircleEnd() throws InterruptedException;
     }
 
     public static void main(String[] args) {
