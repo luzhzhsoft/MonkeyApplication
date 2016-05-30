@@ -17,20 +17,30 @@
 
 package com.bw.luzz.monkeyapplication;
 
+import android.annotation.TargetApi;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +56,13 @@ import com.bignerdranch.android.multiselector.MultiSelector;
 import com.bignerdranch.android.multiselector.SwappingHolder;
 import com.getbase.floatingactionbutton.FloatingActionButton;*/
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -79,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         bananaServiceConnection = BananaServiceConnection.builder().buid(this);
         // Initialize views
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mAddReminderButton = (FloatingActionButton) findViewById(R.id.fab);
+        mAddReminderButton = (FloatingActionButton) findViewById(R.id.add);
         mList = (RecyclerView) findViewById(R.id.reminder_list);
         mNoReminderView = (TextView) findViewById(R.id.no_reminder_text);
 
@@ -90,6 +107,10 @@ public class MainActivity extends AppCompatActivity {
         if (mTest.isEmpty()) {
             mNoReminderView.setVisibility(View.VISIBLE);
         }
+
+        //Util.upgradeRootPermission(getPackageCodePath());
+
+
 
         // Create recycler view
         mList.setLayoutManager(getLayoutManager());
@@ -135,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
             switch (menuItem.getItemId()) {
 
                 // On clicking discard reminders
-                case R.id.discard_reminder:
+                case R.id.discard_script:
                     // Close the context menu
                     actionMode.finish();
 
@@ -179,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
 
                 // On clicking save reminders
-                case R.id.save_reminder:
+                case R.id.save_script:
                     // Close the context menu
                     actionMode.finish();
                     // Clear selected items in recycler view
@@ -245,13 +266,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Setup menu
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // start licenses activity
             case R.id.action_licenses:
-                /*Intent intent = new Intent(this, LicencesActivity.class);
-                startActivity(intent);*/
+                new Thread(()->{
+                    Log.d("input","inpput######################################################################################################");
+                    WindowManager windowManager=(WindowManager)getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+
+                    Display mDisplay=windowManager.getDefaultDisplay();
+                    DisplayMetrics metrics=new DisplayMetrics();
+                    mDisplay.getRealMetrics(metrics);
+                    float[] dims={metrics.widthPixels,metrics.heightPixels};
+                    Log.d("input",""+dims[0]+"HHH:"+dims[1]);
+                }).start();
                 return true;
 
             default:
@@ -297,9 +327,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(VerticalItemHolder itemHolder, int position) {
             ReminderItem item = mItems.get(position);
-            itemHolder.setScriptBody(item.mScriptBody);
+            itemHolder.setTitle(item.mScriptName);
             itemHolder.setReminderDateTime(item.mDateTime);
-            itemHolder.setReminderRepeatInfo(item.mRepeat, item.mScriptTitle, item.mRepeatType);
+            itemHolder.setReminderRepeatInfo(item.mScript);
             //itemHolder.setActiveImage(item.mActive);
         }
 
@@ -310,18 +340,18 @@ public class MainActivity extends AppCompatActivity {
 
         // Class for recycler view items
         public class ReminderItem {
-            public String mScriptBody;
+            public String mScriptName;
             public String mDateTime;
             public String mRepeat;
-            public String mScriptTitle;
+            public String mScript;
             public String mRepeatType;
             public String mActive;
 
-            public ReminderItem(String Title, String DateTime, String Repeat, String RepeatNo, String RepeatType, String Active) {
-                this.mScriptBody = Title;
+            public ReminderItem(String Title, String DateTime, String Repeat, String Script, String RepeatType, String Active) {
+                this.mScriptName = Title;
                 this.mDateTime = DateTime;
                 this.mRepeat = Repeat;
-                this.mScriptTitle = RepeatNo;
+                this.mScript = Script;
                 this.mRepeatType = RepeatType;
                 this.mActive = Active;
             }
@@ -338,7 +368,9 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     return f.parse(o1).compareTo(f.parse(o2));
                 } catch (ParseException e) {
-                    throw new IllegalArgumentException(e);
+                    //throw new IllegalArgumentException(e);
+                    Log.e("Banana",""+e.getMessage());
+                    return 1;
                 }
             }
         }
@@ -349,13 +381,13 @@ public class MainActivity extends AppCompatActivity {
         // UI and data class for recycler view items
         public class VerticalItemHolder extends SwappingHolder
                 implements View.OnClickListener, View.OnLongClickListener {
-            private TextView mTitleText, mDateAndTimeText, mRepeatInfoText;
+            private TextView mTitleText, mDateAndTimeText, mScriptInfo;
             private ImageView mActiveImage, mThumbnailImage;
             private ColorGenerator mColorGenerator = ColorGenerator.DEFAULT;
             private TextDrawable mDrawableBuilder;
             private SimpleAdapter mAdapter;
             private String mScriptBody;
-
+            private final AudioWidget audio;
             public VerticalItemHolder(View itemView, SimpleAdapter adapter) {
                 super(itemView, mMultiSelector);
                 itemView.setOnClickListener(this);
@@ -368,13 +400,53 @@ public class MainActivity extends AppCompatActivity {
                 // Initialize views
                 mTitleText = (TextView) itemView.findViewById(R.id.recycle_title);
                 mDateAndTimeText = (TextView) itemView.findViewById(R.id.recycle_date_time);
-                mRepeatInfoText = (TextView) itemView.findViewById(R.id.recycle_repeat_info);
+                mScriptInfo = (TextView) itemView.findViewById(R.id.script_info);
                 mActiveImage = (ImageView) itemView.findViewById(R.id.active_image);
 
                 mThumbnailImage = (ImageView) itemView.findViewById(R.id.thumbnail_image);
 
                 mActiveImage.setOnClickListener(this);
+
+                audio = new AudioWidget.Builder(getApplicationContext()).build();
+
+                audio.controller().onControlsClickListener(new AudioWidget.OnControlsClickListener() {
+                    @Override
+                    public boolean onPlaylistClicked() {
+                        return false;
+                    }
+
+                    @Override
+                    public void onPreviousClicked() {
+                        //Toast.makeText(mContext,"aaa",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public boolean onPlayPauseClicked() {
+
+
+                        bananaServiceConnection.sendMessage(mScriptBody);
+                        Log.d("Bana", mScriptBody);
+                        return true;
+                    }
+
+                    @Override
+                    public void onNextClicked() {
+                        audio.hide();
+                        Intent i=new Intent(getApplicationContext(),MainActivity.class);
+                        startActivity(i);
+                        //Toast.makeText(getApplicationContext(),"aaa",Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onAlbumClicked() {
+                        int mReminderClickID = IDmap.get(mTempPost);
+                        selectReminder(mReminderClickID);
+                        audio.hide();
+                    }
+                });
             }
+
 
             // On clicking a reminder item
             @Override
@@ -382,39 +454,12 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (v.getId()) {
                     case R.id.active_image:
-                        /*bananaServiceConnection.sendMessage(mScriptBody);
-                        Log.d("Bana",mScriptBody);*/
-                        AudioWidget audio = new AudioWidget.Builder(getApplicationContext()).build();
-                        audio.controller().onControlsClickListener(new AudioWidget.OnControlsClickListener() {
-                            @Override
-                            public boolean onPlaylistClicked() {
-                                return false;
-                            }
+                        /*bananaServiceConnection.sendMessage(mScriptName);
+                        Log.d("Bana",mScriptName);*/
+                        Intent home = new Intent(Intent.ACTION_MAIN);
 
-                            @Override
-                            public void onPreviousClicked() {
-
-                            }
-
-                            @Override
-                            public boolean onPlayPauseClicked() {
-
-
-                                bananaServiceConnection.sendMessage(mScriptBody);
-                                Log.d("Bana", mScriptBody);
-                                return true;
-                            }
-
-                            @Override
-                            public void onNextClicked() {
-
-                            }
-
-                            @Override
-                            public void onAlbumClicked() {
-
-                            }
-                        });
+                        home.addCategory(Intent.CATEGORY_HOME);
+                        startActivity(home);
                         audio.show(100, 100);
 
                         return;
@@ -440,13 +485,13 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Set reminder title view
-            public void setScriptBody(String body) {
-                mScriptBody = body;
-                mTitleText.setText(body);
+            public void setTitle(String title) {
+                //mScriptBody = title;
+                mTitleText.setText(title);
                 String letter = "A";
 
-                if (body != null && !body.isEmpty()) {
-                    letter = body.substring(0, 1);
+                if (title != null && !title.isEmpty()) {
+                    letter = title.substring(0, 1);
                 }
 
                 int color = mColorGenerator.getRandomColor();
@@ -463,12 +508,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Set repeat views
-            public void setReminderRepeatInfo(String repeat, String repeatNo, String repeatType) {
-                if (repeat.equals("true")) {
-                    mRepeatInfoText.setText("Every " + repeatNo + " " + repeatType + "(s)");
-                } else if (repeat.equals("false")) {
-                    mRepeatInfoText.setText("Repeat Off");
-                }
+            public void setReminderRepeatInfo(String script) {
+                    mScriptBody=script;
+                    mScriptInfo.setText("脚本内容： " + script);
+
             }
 
            /* // Set active image as on or off
@@ -506,7 +549,7 @@ public class MainActivity extends AppCompatActivity {
             // Add details of all reminders in their respective lists
             for (Reminder r : reminders) {
                 Titles.add(r.getScriptTitle());
-                DateAndTime.add(r.getDate() + " " + r.getTime());
+                DateAndTime.add(r.getTime());
                 Repeats.add(r.getRepeat());
                 Body.add(r.getScriptBody());
                 RepeatTypes.add(r.getRepeatType());

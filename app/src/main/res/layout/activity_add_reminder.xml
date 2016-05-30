@@ -43,7 +43,7 @@
 
         <EditText
             android:layout_width="match_parent"
-            android:id="@+id/reminder_title"
+            android:id="@+id/script"
             android:layout_marginLeft="72dp"
             android:hint="@string/add_reminder"
             android:textSize="25dp"
@@ -83,9 +83,9 @@
                 android:layout_height="72dp"/>
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:id="@+id/RepeatNo"
+                android:id="@+id/script_rl"
                 android:clickable="true"
-                android:onClick="setRepeatNo"
+                android:onClick="setScriptName"
                 android:background="?android:attr/selectableItemBackground"
                 android:layout_height="72dp">
 
@@ -107,7 +107,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/repeat_no_text"
+                        android:id="@+id/script_name_text"
                         android:textColor="@color/abc_primary_text_material_dark"
                         android:layout_width="wrap_content"
                         android:textSize="15dp"
@@ -116,7 +116,7 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:id="@+id/set_repeat_no"
+                        android:id="@+id/setname"
                         android:textSize="15dp"
                         android:textColor="@color/abc_secondary_text_material_dark"
                         android:layout_height="wrap_content"/>
@@ -128,7 +128,7 @@
                 android:layout_width="match_parent"
                 android:clickable="true"
                 android:onClick="setDate"
-                android:id="@+id/date"
+                android:id="@+id/color_rl"
                 android:background="?android:attr/selectableItemBackground"
                 android:layout_height="72dp">
 
@@ -150,7 +150,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/date_text"
+                        android:id="@+id/color_text"
                         android:textColor="@color/abc_primary_text_material_dark"
                         android:layout_width="wrap_content"
                         android:textSize="15dp"
@@ -159,7 +159,7 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:id="@+id/set_date"
+                        android:id="@+id/color_desc"
                         android:textSize="15dp"
                         android:textColor="@color/abc_secondary_text_material_dark"
                         android:text="@string/select_color_des"
@@ -266,7 +266,7 @@
                     android:textOn="On"
                     android:textOff="Off"/>-->
                 <com.bw.luzz.monkeyapplication.View.material.ButtonFlat
-                    android:id="@+id/repeat_btn"
+                    android:id="@+id/add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -274,7 +274,6 @@
                     android:layout_marginRight="16dp"
                     android:layout_marginLeft="8dp"
                     android:onClick="onWhileAdd"
-
                     android:checked="true"
                     android:text="添加"
                     android:background="#b9e271"
@@ -286,9 +285,9 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:id="@+id/RepeatType"
+                android:id="@+id/help_rl"
                 android:clickable="true"
-                android:onClick="selectRepeatType"
+                android:onClick="onHelpClick"
                 android:background="?android:attr/selectableItemBackground"
                 android:layout_height="72dp">
 
@@ -315,14 +314,15 @@
                         android:layout_width="wrap_content"
                         android:textSize="15dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/repeat_type" />
+                        android:text="@string/script_how" />
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:id="@+id/set_repeat_type"
+                        android:id="@+id/helpdesc"
                         android:textSize="15dp"
                         android:textColor="@color/abc_secondary_text_material_dark"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:text="@string/script_skill"/>
 
                 </LinearLayout>
 
@@ -339,7 +339,7 @@
         android:background="@drawable/toolbar_dropshadow" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/starred1"
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"

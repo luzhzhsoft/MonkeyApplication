@@ -59,7 +59,7 @@
             tools:text="Date and Time" />
 
         <TextView
-            android:id="@+id/recycle_repeat_info"
+            android:id="@+id/script_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="marquee"

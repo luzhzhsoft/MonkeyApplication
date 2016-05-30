@@ -17,9 +17,7 @@
 
 package com.bw.luzz.monkeyapplication;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -31,7 +29,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,18 +40,21 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bw.luzz.monkeyapplication.View.ArcProgressStackView;
+import com.bw.luzz.monkeyapplication.View.Dialog;
 import com.bw.luzz.monkeyapplication.View.material.ButtonFlat;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+import com.bw.luzz.monkeyapplication.View.DateTimePicker.date.DatePickerDialog;
+import com.bw.luzz.monkeyapplication.View.DateTimePicker.time.RadialPickerLayout;
+import com.bw.luzz.monkeyapplication.View.DateTimePicker.time.TimePickerDialog;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 
 public class ReminderEditActivity extends AppCompatActivity implements
@@ -62,17 +62,17 @@ public class ReminderEditActivity extends AppCompatActivity implements
         DatePickerDialog.OnDateSetListener{
 
     private Toolbar mToolbar;
-    private EditText mTitleText;
-    private TextView mDateText, mTimeText, mRepeatText, mRepeatNoText, mRepeatTypeText;
+    private EditText mScriptText;
+    private TextView mColorDesc, mTimeText, mRepeatText, mNameText, mHelpDesc;
     private FloatingActionButton mFAB1;
     private FloatingActionButton mFAB2;
    // private Switch mRepeatSwitch;
     private ButtonFlat mRepeatButton;
-    private String mTitle;
+    private String mScript;
     private String mTime;
     private String mDate;
-    private String mRepeatNo;
-    private String mRepeatType;
+    private String mName;
+    private String mHelpString;
     private String mActive;
     private String mRepeat;
     private String[] mDateSplit;
@@ -89,11 +89,11 @@ public class ReminderEditActivity extends AppCompatActivity implements
     public static final String EXTRA_REMINDER_ID = "Reminder_ID";
 
     // Values for orientation change
-    private static final String KEY_TITLE = "title_key";
+    private static final String KEY_SCRIPT = "title_key";
     private static final String KEY_TIME = "time_key";
-    private static final String KEY_DATE = "date_key";
+    private static final String KEY_COLOR_DESC = "date_key";
     private static final String KEY_REPEAT = "repeat_key";
-    private static final String KEY_REPEAT_NO = "repeat_no_key";
+    private static final String KEY_NAME = "repeat_no_key";
     private static final String KEY_REPEAT_TYPE = "repeat_type_key";
     private static final String KEY_ACTIVE = "active_key";
 
@@ -111,6 +111,9 @@ public class ReminderEditActivity extends AppCompatActivity implements
     private int top;
     private DeskLayout deskLayout;
 
+    /**
+     L* @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,31 +121,31 @@ public class ReminderEditActivity extends AppCompatActivity implements
 
         // Initialize Views
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mTitleText = (EditText) findViewById(R.id.reminder_title);
-        mDateText = (TextView) findViewById(R.id.set_date);
+        mScriptText = (EditText) findViewById(R.id.script);
+        mColorDesc = (TextView) findViewById(R.id.color_desc);
         mTimeText = (TextView) findViewById(R.id.set_time);
         mRepeatText = (TextView) findViewById(R.id.set_repeat);
-        mRepeatNoText = (TextView) findViewById(R.id.set_repeat_no);
-        mRepeatTypeText = (TextView) findViewById(R.id.set_repeat_type);
-        mFAB1 = (FloatingActionButton) findViewById(R.id.starred1);
+        mNameText = (TextView) findViewById(R.id.setname);
+        mHelpDesc = (TextView) findViewById(R.id.helpdesc);
+        mFAB1 = (FloatingActionButton) findViewById(R.id.fab);
        // mRepeatSwitch = (Switch) findViewById(R.id.repeat_switch);
-        mRepeatButton=(ButtonFlat)findViewById(R.id.repeat_btn);
+        mRepeatButton=(ButtonFlat)findViewById(R.id.add);
         // Setup Toolbar
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle(R.string.title_activity_edit_reminder);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        createWindwo();
+        createWindow();
         createDeskLayout();
         // Setup Reminder Title EditText
-        mTitleText.addTextChangedListener(new TextWatcher() {
+        mScriptText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mTitle = s.toString().trim();
-                mTitleText.setError(null);
+                mScript = s.toString().trim();
+                mScriptText.setError(null);
             }
 
             @Override
@@ -157,47 +160,47 @@ public class ReminderEditActivity extends AppCompatActivity implements
         mReceivedReminder = rb.getReminder(mReceivedID);
 
         // Get values from reminder
-        mTitle = mReceivedReminder.getScriptBody();
+        mScript = mReceivedReminder.getScriptBody();
         mDate = mReceivedReminder.getDate();
         mTime = mReceivedReminder.getTime();
         mRepeat = mReceivedReminder.getRepeat();
-        mRepeatNo = mReceivedReminder.getScriptTitle();
-        mRepeatType = mReceivedReminder.getRepeatType();
+        mName = mReceivedReminder.getScriptTitle();
+        mHelpString = mReceivedReminder.getRepeatType();
         mActive = mReceivedReminder.getActive();
 
         // Setup TextViews using reminder values
-        mTitleText.setText(mTitle);
-        mDateText.setText(mDate);
+        mScriptText.setText(mScript);
+        mColorDesc.setText(mDate);
         mTimeText.setText(mTime);
-        mRepeatNoText.setText(mRepeatNo);
-        mRepeatTypeText.setText(mRepeatType);
-        mRepeatText.setText("Every " + mRepeatNo + " " + mRepeatType + "(s)");
+        mNameText.setText(mName);
+        mHelpDesc.setText(mHelpString);
+        mRepeatText.setText("Every " + mName + " " + mHelpString + "(s)");
 
         // To save state on device rotation
         if (savedInstanceState != null) {
-            String savedTitle = savedInstanceState.getString(KEY_TITLE);
-            mTitleText.setText(savedTitle);
-            mTitle = savedTitle;
+            String savedScript = savedInstanceState.getString(KEY_SCRIPT);
+            mScriptText.setText(savedScript);
+            mScript = savedScript;
 
             String savedTime = savedInstanceState.getString(KEY_TIME);
             mTimeText.setText(savedTime);
             mTime = savedTime;
 
-            String savedDate = savedInstanceState.getString(KEY_DATE);
-            mDateText.setText(savedDate);
-            mDate = savedDate;
+            String savedColor = savedInstanceState.getString(KEY_COLOR_DESC);
+            mColorDesc.setText(savedColor);
+            mDate = savedColor;
 
             String saveRepeat = savedInstanceState.getString(KEY_REPEAT);
             mRepeatText.setText(saveRepeat);
             mRepeat = saveRepeat;
 
-            String savedRepeatNo = savedInstanceState.getString(KEY_REPEAT_NO);
-            mRepeatNoText.setText(savedRepeatNo);
-            mRepeatNo = savedRepeatNo;
+            String savedName = savedInstanceState.getString(KEY_NAME);
+            mNameText.setText(savedName);
+            mName = savedName;
 
-            String savedRepeatType = savedInstanceState.getString(KEY_REPEAT_TYPE);
-            mRepeatTypeText.setText(savedRepeatType);
-            mRepeatType = savedRepeatType;
+            String savedHelpDesc = savedInstanceState.getString(KEY_REPEAT_TYPE);
+            mHelpDesc.setText(savedHelpDesc);
+            mHelpString = savedHelpDesc;
 
             mActive = savedInstanceState.getString(KEY_ACTIVE);
         }
@@ -216,14 +219,14 @@ public class ReminderEditActivity extends AppCompatActivity implements
         mCalendar = Calendar.getInstance();
         //mAlarmReceiver = new AlarmReceiver();
 
-        mDateSplit = mDate.split("/");
+        /*mDateSplit = mDate.split("/");
         mTimeSplit = mTime.split(":");
 
         mDay = Integer.parseInt(mDateSplit[0]);
         mMonth = Integer.parseInt(mDateSplit[1]);
         mYear = Integer.parseInt(mDateSplit[2]);
         mHour = Integer.parseInt(mTimeSplit[0]);
-        mMinute = Integer.parseInt(mTimeSplit[1]);
+        mMinute = Integer.parseInt(mTimeSplit[1]);*/
     }
 
     // To save state on device rotation
@@ -231,12 +234,12 @@ public class ReminderEditActivity extends AppCompatActivity implements
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putCharSequence(KEY_TITLE, mTitleText.getText());
+        outState.putCharSequence(KEY_SCRIPT, mScriptText.getText());
         outState.putCharSequence(KEY_TIME, mTimeText.getText());
-        outState.putCharSequence(KEY_DATE, mDateText.getText());
+        outState.putCharSequence(KEY_COLOR_DESC, mColorDesc.getText());
         outState.putCharSequence(KEY_REPEAT, mRepeatText.getText());
-        outState.putCharSequence(KEY_REPEAT_NO, mRepeatNoText.getText());
-        outState.putCharSequence(KEY_REPEAT_TYPE, mRepeatTypeText.getText());
+        outState.putCharSequence(KEY_NAME, mNameText.getText());
+        outState.putCharSequence(KEY_REPEAT_TYPE, mHelpDesc.getText());
         outState.putCharSequence(KEY_ACTIVE, mActive);
     }
 
@@ -251,7 +254,7 @@ public class ReminderEditActivity extends AppCompatActivity implements
                 this,
                 now.get(Calendar.HOUR_OF_DAY),
                 now.get(Calendar.MINUTE),
-                false
+                true
         );
         tpd.setThemeDark(false);
         tpd.show(getFragmentManager(), "Timepickerdialog");
@@ -269,9 +272,9 @@ public class ReminderEditActivity extends AppCompatActivity implements
         dpd.show(getFragmentManager(), "Datepickerdialog");
     }
 
-    // Obtain time from time picker
+
     @Override
-    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
+    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
         mHour = hourOfDay;
         mMinute = minute;
         if (minute < 10) {
@@ -290,7 +293,7 @@ public class ReminderEditActivity extends AppCompatActivity implements
         mMonth = monthOfYear;
         mYear = year;
         mDate = dayOfMonth + "/" + monthOfYear + "/" + year;
-        mDateText.setText(mDate);
+        mColorDesc.setText(mDate);
     }
 
 
@@ -298,11 +301,14 @@ public class ReminderEditActivity extends AppCompatActivity implements
     // On clicking the repeat switch
     public void onWhileAdd(View view) {
         Toast.makeText(getApplicationContext(),"添加while",Toast.LENGTH_SHORT).show();
+
+        String script= mScriptText.getText().toString();
+        mScriptText.setText("While true \n"+script+"\n End \n");
     }
 
     // On clicking repeat type button
-    public void selectRepeatType(View v){
-        final String[] items = new String[5];
+    public void onHelpClick(View v){
+        /*final String[] items = new String[5];
 
         items[0] = "Minute";
         items[1] = "Hour";
@@ -317,18 +323,20 @@ public class ReminderEditActivity extends AppCompatActivity implements
 
             public void onClick(DialogInterface dialog, int item) {
 
-                mRepeatType = items[item];
-                mRepeatTypeText.setText(mRepeatType);
-                mRepeatText.setText("Every " + mRepeatNo + " " + mRepeatType + "(s)");
+                mHelpString = items[item];
+                mHelpDesc.setText(mHelpString);
+                mRepeatText.setText("Every " + mName + " " + mHelpString + "(s)");
             }
         });
         AlertDialog alert = builder.create();
-        alert.show();
+        alert.show();*/
+
+        Toast.makeText(getApplicationContext(),"help tiao zhuan",Toast.LENGTH_SHORT).show();
     }
 
     // On clicking repeat interval button
-    public void setRepeatNo(View v){
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+    public void setScriptName(View v){
+        /*AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Enter Number");
 
         // Create EditText box to input repeat number
@@ -340,14 +348,14 @@ public class ReminderEditActivity extends AppCompatActivity implements
                     public void onClick(DialogInterface dialog, int whichButton) {
 
                         if (input.getText().toString().length() == 0) {
-                            mRepeatNo = Integer.toString(1);
-                            mRepeatNoText.setText(mRepeatNo);
-                            mRepeatText.setText("Every " + mRepeatNo + " " + mRepeatType + "(s)");
+                            mName = Integer.toString(1);
+                            mNameText.setText(mName);
+                            mRepeatText.setText("Every " + mName + " " + mHelpString + "(s)");
                         }
                         else {
-                            mRepeatNo = input.getText().toString().trim();
-                            mRepeatNoText.setText(mRepeatNo);
-                            mRepeatText.setText("Every " + mRepeatNo + " " + mRepeatType + "(s)");
+                            mName = input.getText().toString().trim();
+                            mNameText.setText(mName);
+                            mRepeatText.setText("Every " + mName + " " + mHelpString + "(s)");
                         }
                     }
                 });
@@ -356,19 +364,58 @@ public class ReminderEditActivity extends AppCompatActivity implements
                 // Do nothing
             }
         });
-        alert.show();
+        alert.show();*/
+        final Dialog dialog=new Dialog(this,"输入脚本名称","默认脚本名为：我的脚本");
+        dialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              /*  if (input.getText().toString().length() == 0) {
+                    mName = "我的脚本";
+                    mNameText.setText(mName);
+                    mRepeatText.setText("名称 " + mName );
+                }
+                else {
+                    mName = input.getText().toString().trim();
+                    mNameText.setText(mName);
+                    mRepeatText.setText("名称 " + mName);
+                }*/
+
+                String input=dialog.getMessage();
+                if (input.length() == 0) {
+                    mName = "我的脚本";
+                    mNameText.setText(mName);
+                    mRepeatText.setText("名称 " + mName);
+                }
+                else {
+                    mName = input.trim();
+                    mNameText.setText(mName);
+                    mRepeatText.setText("名称 " + mName);
+                }
+            }
+        });
+        dialog.show();
+        if(mName !=null){
+            dialog.setMessage(mName);
+        }
     }
 
     // On clicking the update button
     public void updateReminder(){
         // Set new values in the reminder
-        mReceivedReminder.setScriptBody(mTitle);
+        mReceivedReminder.setScriptBody(mScript);
         mReceivedReminder.setDate(mDate);
-        mReceivedReminder.setTime(mTime);
+        //mReceivedReminder.setTime(mTime);
         mReceivedReminder.setRepeat(mRepeat);
-        mReceivedReminder.setScriptTitle(mRepeatNo);
-        mReceivedReminder.setRepeatType(mRepeatType);
+        mReceivedReminder.setScriptTitle(mName);
+        mReceivedReminder.setRepeatType(mHelpString);
         mReceivedReminder.setActive(mActive);
+
+
+        Date date=new Date(System.currentTimeMillis());
+        DateFormat dateFormat=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        String dateandtime=dateFormat.format(date);
+
+        mReceivedReminder.setTime(dateandtime);
 
         // Update reminder
         rb.updateReminder(mReceivedReminder);
@@ -384,18 +431,18 @@ public class ReminderEditActivity extends AppCompatActivity implements
         // Cancel existing notification of the reminder by using its ID
         //mAlarmReceiver.cancelAlarm(getApplicationContext(), mReceivedID);
 
-        // Check repeat type
-        if (mRepeatType.equals("Minute")) {
-            mRepeatTime = Integer.parseInt(mRepeatNo) * milMinute;
-        } else if (mRepeatType.equals("Hour")) {
-            //mRepeatTime = Integer.parseInt(mRepeatNo) * milHour;
-        } else if (mRepeatType.equals("Day")) {
-            mRepeatTime = Integer.parseInt(mRepeatNo) * milDay;
-        } else if (mRepeatType.equals("Week")) {
-            mRepeatTime = Integer.parseInt(mRepeatNo) * milWeek;
-        } else if (mRepeatType.equals("Month")) {
-            mRepeatTime = Integer.parseInt(mRepeatNo) * milMonth;
-        }
+       /* // Check repeat type
+        if (mHelpString.equals("Minute")) {
+            mRepeatTime = Integer.parseInt(mName) * milMinute;
+        } else if (mHelpString.equals("Hour")) {
+            //mRepeatTime = Integer.parseInt(mName) * milHour;
+        } else if (mHelpString.equals("Day")) {
+            mRepeatTime = Integer.parseInt(mName) * milDay;
+        } else if (mHelpString.equals("Week")) {
+            mRepeatTime = Integer.parseInt(mName) * milWeek;
+        } else if (mHelpString.equals("Month")) {
+            mRepeatTime = Integer.parseInt(mName) * milMonth;
+        }*/
 
         // Create a new notification
         if (mActive.equals("true")) {
@@ -438,11 +485,11 @@ public class ReminderEditActivity extends AppCompatActivity implements
 
             // On clicking save reminder button
             // Update reminder
-            case R.id.save_reminder:
-                mTitleText.setText(mTitle);
+            case R.id.save_script:
+                mScriptText.setText(mScript);
 
-                if (mTitleText.getText().toString().length() == 0)
-                    mTitleText.setError("Reminder Title cannot be blank!");
+                if (mScriptText.getText().toString().length() == 0)
+                    mScriptText.setError("脚本不能为空");
 
                 else {
                     updateReminder();
@@ -451,8 +498,8 @@ public class ReminderEditActivity extends AppCompatActivity implements
 
             // On clicking discard reminder button
             // Discard any changes
-            case R.id.discard_reminder:
-                Toast.makeText(getApplicationContext(), "Changes Discarded",
+            case R.id.discard_script:
+                Toast.makeText(getApplicationContext(), "放弃修改",
                         Toast.LENGTH_SHORT).show();
 
                 onBackPressed();
@@ -517,7 +564,7 @@ public class ReminderEditActivity extends AppCompatActivity implements
         finish();
     }
 
-    private void createWindwo() {
+    private void createWindow() {
         mWindowManager = (WindowManager)getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         mLayout = new WindowManager.LayoutParams();
 
