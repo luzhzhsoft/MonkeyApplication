@@ -16,10 +16,6 @@ import java.util.regex.Pattern;
 public class CmpColorInterpretor extends CommandInterpretor{
     public static boolean isDebug=false;
     private WeakReference<Context> weakReference;
-    //cmpColor(100,200,-544009)
-    //cmpColor\((\d+),(\d+),([-]?\d+)\)
-    //cmpColor(100,200,-5400121,0.9)
-    //
     @Override
     public String interprete(String command) throws InterruptedException {
         String noBlankCommand=command.trim().replace(" ","");

@@ -3,13 +3,17 @@ package com.bw.luzz.monkeyapplication;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.bw.luzz.monkeyapplication.command.BananaThread;
 
@@ -64,9 +68,17 @@ public class BananaService extends Service {
                     this.removeMessages(RUN_SCRIPT);
                     String script=msg.getData().getString(BananaService.SCRIPT);
                     Log.d(BANANA_SERVICE,script);
+                    WindowManager windowManager=(WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+
+                    Display mDisplay=windowManager.getDefaultDisplay();
+                    DisplayMetrics metrics=new DisplayMetrics();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        mDisplay.getRealMetrics(metrics);
+                    }
+                    BitmapUtil.dims[0]=metrics.widthPixels;
+                    BitmapUtil.dims[1]=metrics.heightPixels;
                     BananaThread
                             .getInstance()
-                            .setContext(context)
                             .setScript(script)
                             .run();
                     break;

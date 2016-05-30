@@ -9,6 +9,7 @@ import android.graphics.Point;
 import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Surface;
@@ -28,6 +29,7 @@ import java.lang.reflect.Method;
  * 用来对bitmap进行操作的类
  */
 public class BitmapUtil {
+    public static float dims[]=new float[]{1080,1920};
     //获取view缓存的bitmap
     public static Bitmap getDrawingCache(View view){
         view.setDrawingCacheEnabled(true);
@@ -95,12 +97,21 @@ public class BitmapUtil {
      * @return
      */
     public static Bitmap getSystemScreen(Context context){
-        WindowManager windowManager=(WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+        if(context!=null){
+            WindowManager windowManager=(WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
 
-        Display mDisplay=windowManager.getDefaultDisplay();
-        DisplayMetrics metrics=new DisplayMetrics();
-        mDisplay.getRealMetrics(metrics);
-        float[] dims={metrics.widthPixels,metrics.heightPixels};
+            Display mDisplay=windowManager.getDefaultDisplay();
+            DisplayMetrics metrics=new DisplayMetrics();
+            mDisplay.getRealMetrics(metrics);
+            dims[0]=metrics.widthPixels;
+            dims[1]=metrics.heightPixels;
+        }
+
+        return getSystemScreen(dims);
+    }
+
+    @NonNull
+    private static Bitmap getSystemScreen(float[] dims) {
         Bitmap bitmap=null;
         if(Build.VERSION.SDK_INT<Build.VERSION_CODES.JELLY_BEAN_MR2){
             try {
