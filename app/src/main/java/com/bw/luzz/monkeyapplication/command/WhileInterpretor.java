@@ -53,7 +53,7 @@ public class WhileInterpretor extends CommandInterpretor{
     	 String test="While true\n"+
     			 		"TracePrint:4\n"+
     			 		"TracePrint:2\n"+
-    			 		"Continue \n"+
+    			 		"Break \n"+
     			 		"TracePrint:3\n"+
     			 		
     			 		"End";

@@ -47,11 +47,11 @@ public class BananaRunner {
 		}else if(commandKey[0].startsWith(KeyWorld.Dim)){
 			return DimInterpretor.getInstance();
 		}else if(commandKey[0].startsWith(KeyWorld.CmpColor)){
-			return CmpColorInterpretor.getInstance(BananaThread.getInstance().getContext());
+			return CmpColorInterpretor.getInstance();
 		}else if(commandKey[0].startsWith(KeyWorld.StartActivity)){
 			return StartActivityInterpretor.getInstance(BananaThread.getInstance().getContext());
 		}else if(commandKey[0].startsWith(KeyWorld.GetPixelColor)){
-			return GetPixelColorInterpretor.getInstance(BananaThread.getInstance().getContext());
+			return GetPixelColorInterpretor.getInstance();
 		}else if(keyworldMap.containsKey(commandKey[0])){
 			return keyworldMap.get(commandKey[0]);
 		}else if(commandKey[0].equals("true")||commandKey[0].equals("false")){

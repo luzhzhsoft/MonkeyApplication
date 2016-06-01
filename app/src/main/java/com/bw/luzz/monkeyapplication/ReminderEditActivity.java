@@ -55,6 +55,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class ReminderEditActivity extends AppCompatActivity implements
@@ -162,7 +164,8 @@ public class ReminderEditActivity extends AppCompatActivity implements
         // Get values from reminder
         mScript = mReceivedReminder.getScriptBody();
         mDate = mReceivedReminder.getDate();
-        mTime = mReceivedReminder.getTime();
+       // mTime = mReceivedReminder.getTime();
+        mTime="00:00";
         mRepeat = mReceivedReminder.getRepeat();
         mName = mReceivedReminder.getScriptTitle();
         mHelpString = mReceivedReminder.getRepeatType();
@@ -174,7 +177,7 @@ public class ReminderEditActivity extends AppCompatActivity implements
         mTimeText.setText(mTime);
         mNameText.setText(mName);
         mHelpDesc.setText(mHelpString);
-        mRepeatText.setText("Every " + mName + " " + mHelpString + "(s)");
+        mRepeatText.setText("点击按钮添加循环");
 
         // To save state on device rotation
         if (savedInstanceState != null) {
@@ -261,15 +264,16 @@ public class ReminderEditActivity extends AppCompatActivity implements
     }
 
     // On clicking Date picker
-    public void setDate(View v){
-        Calendar now = Calendar.getInstance();
+    public void setColorPick(View v){
+        /*Calendar now = Calendar.getInstance();
         DatePickerDialog dpd = DatePickerDialog.newInstance(
                 this,
                 now.get(Calendar.YEAR),
                 now.get(Calendar.MONTH),
                 now.get(Calendar.DAY_OF_MONTH)
         );
-        dpd.show(getFragmentManager(), "Datepickerdialog");
+        dpd.show(getFragmentManager(), "Datepickerdialog");*/
+        showWindow(deskLayout);
     }
 
 
@@ -305,7 +309,20 @@ public class ReminderEditActivity extends AppCompatActivity implements
         String script= mScriptText.getText().toString();
         mScriptText.setText("While true \n"+script+"\n End \n");
     }
+    public void onDelayAdd(View view){
+        String timeStr=mTimeText.getText().toString();
+        String script= mScriptText.getText().toString();
 
+        String timeReg="(\\d\\d?):(\\d\\d?)";
+        Matcher matcher= Pattern.compile(timeReg).matcher(timeStr);
+
+        if(matcher.find()){
+            timeStr=""+(Integer.valueOf(matcher.group(1))*3600+Integer.valueOf(matcher.group(2))*60);
+        }else {
+            throw new IllegalArgumentException("时间格式不正确");
+        }
+        mScriptText.setText(script+"\n"+"Delay "+timeStr);
+    }
     // On clicking repeat type button
     public void onHelpClick(View v){
         /*final String[] items = new String[5];
@@ -454,7 +471,7 @@ public class ReminderEditActivity extends AppCompatActivity implements
         }
 
         // Create toast to confirm update
-        Toast.makeText(getApplicationContext(), "Edited",
+        Toast.makeText(getApplicationContext(), "编辑成功",
                 Toast.LENGTH_SHORT).show();
         onBackPressed();
     }
@@ -514,11 +531,10 @@ public class ReminderEditActivity extends AppCompatActivity implements
     @NonNull
     private void createDeskLayout() {
         deskLayout=new DeskLayout(this);
-
+        String mID=getIntent().getStringExtra(EXTRA_REMINDER_ID);
         deskLayout.setOnTouchListener(new View.OnTouchListener() {
             float mTouchX;
             float mTouchY;
-
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 float rawX = event.getRawX();
@@ -530,7 +546,8 @@ public class ReminderEditActivity extends AppCompatActivity implements
                         long endTime = System.currentTimeMillis() - startTime;
                         if (endTime <= 300) {
                             hideWidow(deskLayout);
-                            Intent i=new Intent(getApplicationContext(),FloatWindowActivity.class);
+                            Intent i=new Intent(getApplicationContext(),ReminderEditActivity.class);
+                            i.putExtra(ReminderEditActivity.EXTRA_REMINDER_ID,mID);
                             startActivity(i);
                         }
                         startTime = System.currentTimeMillis();
@@ -557,11 +574,15 @@ public class ReminderEditActivity extends AppCompatActivity implements
 
     private void hideWidow(DeskLayout deskLayout) {
         mWindowManager.removeView(deskLayout);
-        finish();
+        //finish();
     }
     private void showWindow(DeskLayout deskLayout) {
         mWindowManager.addView(deskLayout, mLayout);
-        finish();
+        Intent home = new Intent(Intent.ACTION_MAIN);
+
+        home.addCategory(Intent.CATEGORY_HOME);
+
+        startActivity(home);
     }
 
     private void createWindow() {

@@ -49,14 +49,14 @@ public class CmpColorInterpretor extends CommandInterpretor{
 
     private static CmpColorInterpretor mCmpColorInterpretor=null;
 
-    private CmpColorInterpretor(Context context) {
-        weakReference=new WeakReference<Context>(context);
+    private CmpColorInterpretor() {
+        //weakReference=new WeakReference<Context>(context);
     }
-    public static CmpColorInterpretor getInstance(Context context){
+    public static CmpColorInterpretor getInstance(){
         if(mCmpColorInterpretor==null){
             synchronized (CmpColorInterpretor.class){
                 if(mCmpColorInterpretor==null){
-                    mCmpColorInterpretor=new CmpColorInterpretor(context);
+                    mCmpColorInterpretor=new CmpColorInterpretor();
                 }
             }
         }

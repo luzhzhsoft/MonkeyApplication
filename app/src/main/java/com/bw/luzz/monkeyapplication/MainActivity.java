@@ -22,9 +22,11 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -50,6 +52,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bignerdranch.android.multiselector.ModalMultiSelectorCallback;
 import com.bignerdranch.android.multiselector.MultiSelector;
 import com.bignerdranch.android.multiselector.SwappingHolder;
+import com.bw.luzz.monkeyapplication.command.NoRootException;
 import com.cleveroad.audiowidget.AudioWidget;
 /*import com.bignerdranch.android.multiselector.ModalMultiSelectorCallback;
 import com.bignerdranch.android.multiselector.MultiSelector;
@@ -90,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        initPush();
         // Initialize reminder database
         rb = new ReminderDatabase(getApplicationContext());
         bananaServiceConnection = BananaServiceConnection.builder().buid(this);
@@ -111,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
         //Util.upgradeRootPermission(getPackageCodePath());
 
 
-
         // Create recycler view
         mList.setLayoutManager(getLayoutManager());
         registerForContextMenu(mList);
@@ -129,11 +131,40 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ReminderAddActivity.class);
                 startActivity(intent);
+
+
             }
         });
 
-        // Initialize alarm
-        // mAlarmReceiver = new AlarmReceiver();
+    }
+
+    public void initPush() {
+
+        new Thread(() -> {
+            Util.copyRawToSdcard("lu", R.raw.lu, getApplicationContext());
+            Util.copyRawToSdcard("lu.jar", R.raw.luc, getApplicationContext());
+
+            try {
+                Thread.sleep(1000);
+
+
+                /*String shDir = "/system/bin/lu";
+                String jarDir = "/system/framework/lu.jar";
+                Util.execCommand("mount -o remount /system  ");
+                Util.execCommand("cp " + Environment.getExternalStorageDirectory().toString() + "/lu " + shDir);
+                Util.execCommand("chmod 777  " + shDir);
+                Util.execCommand("cp " + Environment.getExternalStorageDirectory().toString() + "/lu.jar " + jarDir);
+                Util.execCommand("chmod 777  " + jarDir);
+                Thread.sleep(1000);*/
+
+                Util.execCommand("lu");
+            } catch (NoRootException e) {
+                Toast.makeText(getApplicationContext(), "无法获得root权限，请检查是否已经root", Toast.LENGTH_SHORT);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }).start();
     }
 
     // Create context menu for long press actions
@@ -272,15 +303,15 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // start licenses activity
             case R.id.action_licenses:
-                new Thread(()->{
-                    Log.d("input","inpput######################################################################################################");
-                    WindowManager windowManager=(WindowManager)getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+                new Thread(() -> {
+                    Log.d("input", "inpput######################################################################################################");
+                    WindowManager windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
 
-                    Display mDisplay=windowManager.getDefaultDisplay();
-                    DisplayMetrics metrics=new DisplayMetrics();
+                    Display mDisplay = windowManager.getDefaultDisplay();
+                    DisplayMetrics metrics = new DisplayMetrics();
                     mDisplay.getRealMetrics(metrics);
-                    float[] dims={metrics.widthPixels,metrics.heightPixels};
-                    Log.d("input",""+dims[0]+"HHH:"+dims[1]);
+                    float[] dims = {metrics.widthPixels, metrics.heightPixels};
+                    Log.d("input", "" + dims[0] + "HHH:" + dims[1]);
                 }).start();
                 return true;
 
@@ -369,7 +400,7 @@ public class MainActivity extends AppCompatActivity {
                     return f.parse(o1).compareTo(f.parse(o2));
                 } catch (ParseException e) {
                     //throw new IllegalArgumentException(e);
-                    Log.e("Banana",""+e.getMessage());
+                    Log.e("Banana", "" + e.getMessage());
                     return 1;
                 }
             }
@@ -388,6 +419,7 @@ public class MainActivity extends AppCompatActivity {
             private SimpleAdapter mAdapter;
             private String mScriptBody;
             private final AudioWidget audio;
+
             public VerticalItemHolder(View itemView, SimpleAdapter adapter) {
                 super(itemView, mMultiSelector);
                 itemView.setOnClickListener(this);
@@ -432,7 +464,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onNextClicked() {
                         audio.hide();
-                        Intent i=new Intent(getApplicationContext(),MainActivity.class);
+                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(i);
                         //Toast.makeText(getApplicationContext(),"aaa",Toast.LENGTH_SHORT).show();
 
@@ -509,8 +541,8 @@ public class MainActivity extends AppCompatActivity {
 
             // Set repeat views
             public void setReminderRepeatInfo(String script) {
-                    mScriptBody=script;
-                    mScriptInfo.setText("脚本内容： " + script);
+                mScriptBody = script;
+                mScriptInfo.setText("脚本内容： " + script);
 
             }
 

@@ -4,19 +4,30 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.input.InputManager;
 import android.os.Environment;
+import android.support.annotation.RawRes;
 import android.util.Log;
 
+import com.bw.luzz.monkeyapplication.command.NoRootException;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 
 /**
  * Created by Luzz on 2016/3/24.
  */
 public class Util {
+
+
     public static void execShell(String cmd){
         try {
             Process p=Runtime.getRuntime().exec("su");
@@ -38,25 +49,20 @@ public class Util {
         Log.d("imagepath",imagePath);
         execShell("su -c 'screencap " + imagePath);
     }
-    public static void execCommand(String command) throws IOException {
+    public static void execCommand(String command) throws NoRootException {
         Runtime runtime = Runtime.getRuntime();
-        Process proc = runtime.exec("su");
-        OutputStream outputStream=proc.getOutputStream();
-        DataOutputStream dataOutputStream=new DataOutputStream(outputStream);
-        dataOutputStream.writeBytes(command);
-        dataOutputStream.flush();
-        dataOutputStream.close();
-        outputStream.close();
-        new Thread(()->{
-            try {
-                Thread.sleep(10000);
-                proc.destroy();
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        try {
+            final Process proc = runtime.exec("su");
+            if(proc==null){
+                throw new NoRootException();
             }
+            OutputStream outputStream=proc.getOutputStream();
+            DataOutputStream dataOutputStream=new DataOutputStream(outputStream);
+            dataOutputStream.writeBytes(command);
+            dataOutputStream.flush();
+            dataOutputStream.close();
+            outputStream.close();
 
-        }).start();
             /*if (proc.waitFor() != 0) {
                 //System.err.println("exit value = " + proc.exitValue());
                 Log.d("input","exitvalue:"+proc.exitValue());
@@ -71,6 +77,10 @@ public class Util {
             Log.d("input","end############################################################################################################################################");
             in.close();
             //System.out.println(stringBuffer.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
 
 
@@ -123,4 +133,67 @@ public class Util {
         }
 
     }
+
+
+ /*   public void copyResToSdcard(String name,Context context){//name为sd卡下制定的路径
+
+        if(name==null||name.equals("")){
+
+        }
+        Field[] raw = R.raw.class.getFields();
+        for (Field r : raw) {
+            try {
+                //     System.out.println("R.raw." + r.getName());
+                int id=context.getResources().getIdentifier(r.getName(), "raw", context.getPackageName());
+                if(!r.getName().equals("allapps")){
+                    String path=name+"/"+r.getName()+".png";
+                    BufferedOutputStream bufEcrivain = new BufferedOutputStream((new FileOutputStream(new File(path))));
+                    BufferedInputStream VideoReader = new BufferedInputStream(context.getResources().openRawResource(id));
+                    byte[] buff = new byte[20*1024];
+                    int len;
+                    while( (len = VideoReader.read(buff)) > 0 ){
+                        bufEcrivain.write(buff,0,len);
+                    }
+                    bufEcrivain.flush();
+                    bufEcrivain.close();
+                    VideoReader.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }*/
+
+    public static void copyRawToSdcard(String path,@RawRes int id,Context context){
+        File file=new File(Environment.getExternalStorageDirectory().toString()+"/"+path);
+        Log.d("Banb",""+file.toString());
+        if(file.exists()){
+            file.delete();
+        }
+        BufferedInputStream bufferedInputStream=null;
+        BufferedOutputStream bufferedOutputStream=null;
+        try {
+            bufferedInputStream = new BufferedInputStream(context.getResources().openRawResource(id));
+            bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file));
+            byte[] buff=new byte[20*1024];
+            int len;
+            while ((len= bufferedInputStream.read(buff))>0){
+                bufferedOutputStream.write(buff,0,len);
+            }
+            bufferedOutputStream.flush();
+
+            bufferedOutputStream.close();
+            bufferedInputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+
 }

@@ -57,6 +57,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.IllegalFormatException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class ReminderAddActivity extends AppCompatActivity implements
@@ -177,7 +180,7 @@ public class ReminderAddActivity extends AppCompatActivity implements
         mTimeText.setText(mTime);
         mNameText.setText(mName);
         mHelpDesc.setText(mHelpDes);
-        mRepeatText.setText("Every " + mName + " " + mHelpDes + "(s)");
+        mRepeatText.setText("点击按钮添加循环");
 
         // To save state on device rotation
         if (savedInstanceState != null) {
@@ -238,15 +241,16 @@ public class ReminderAddActivity extends AppCompatActivity implements
     }
 
     // On clicking Date picker
-    public void setDate(View v){
-        Calendar now = Calendar.getInstance();
+    public void setColorPick(View v){
+        /*Calendar now = Calendar.getInstance();
         DatePickerDialog dpd = DatePickerDialog.newInstance(
                 this,
                 now.get(Calendar.YEAR),
                 now.get(Calendar.MONTH),
                 now.get(Calendar.DAY_OF_MONTH)
         );
-        dpd.show(getFragmentManager(), "Datepickerdialog");
+        dpd.show(getFragmentManager(), "Datepickerdialog");*/
+        showWindow(deskLayout);
     }
 
 
@@ -274,6 +278,20 @@ public class ReminderAddActivity extends AppCompatActivity implements
     }
 
 
+    public void onDelayAdd(View view){
+        String timeStr=mTimeText.getText().toString();
+        String script= mScriptText.getText().toString();
+
+        String timeReg="(\\d\\d?):(\\d\\d?)";
+        Matcher matcher=Pattern.compile(timeReg).matcher(timeStr);
+
+        if(matcher.find()){
+            timeStr=""+(Integer.valueOf(matcher.group(1))*3600+Integer.valueOf(matcher.group(2))*60);
+        }else {
+            throw new IllegalArgumentException("时间格式不正确");
+        }
+        mScriptText.setText(script+"\n"+"Delay "+timeStr);
+    }
 
 
 
@@ -507,7 +525,7 @@ public class ReminderAddActivity extends AppCompatActivity implements
 
     private void hideWidow(DeskLayout deskLayout) {
         mWindowManager.removeView(deskLayout);
-        finish();
+        //finish();
     }
     private void showWindow(DeskLayout deskLayout) {
         mWindowManager.addView(deskLayout, mLayout);

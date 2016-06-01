@@ -33,14 +33,14 @@ public class GetPixelColorInterpretor extends CommandInterpretor{
 
     private static GetPixelColorInterpretor mGetPixelColorInterpretor=null;
 
-    private GetPixelColorInterpretor(Context context) {
-        weakReference=new WeakReference<Context>(context);
+    private GetPixelColorInterpretor() {
+        //weakReference=new WeakReference<Context>(context);
     }
-    public static GetPixelColorInterpretor getInstance(Context context){
+    public static GetPixelColorInterpretor getInstance(){
         if(mGetPixelColorInterpretor==null){
             synchronized (GetPixelColorInterpretor.class){
                 if(mGetPixelColorInterpretor==null){
-                    mGetPixelColorInterpretor=new GetPixelColorInterpretor(context);
+                    mGetPixelColorInterpretor=new GetPixelColorInterpretor();
                 }
             }
         }
